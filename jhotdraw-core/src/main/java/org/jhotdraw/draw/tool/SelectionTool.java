@@ -147,7 +147,6 @@ public class SelectionTool extends AbstractTool {
         return isSelectBehindEnabled;
     }
 
-    @FeatureEntryPoint(value = "Select")
     @Override
     public void activate(DrawingEditor editor) {
         super.activate(editor);
@@ -224,6 +223,7 @@ public class SelectionTool extends AbstractTool {
         tracker.draw(g);
     }
 
+    @FeatureEntryPoint(value = "Select")
     @Override
     public void mousePressed(MouseEvent evt) {
         if (getView() != null && getView().isEnabled()) {
