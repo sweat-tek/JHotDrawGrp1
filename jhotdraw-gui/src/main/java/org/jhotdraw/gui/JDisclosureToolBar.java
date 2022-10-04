@@ -36,7 +36,6 @@ public class JDisclosureToolBar extends JToolBar {
         initComponents();
     }
 
-    @FeatureEntryPoint(value = "tools-display")
     private void initComponents() {
         GridBagConstraints gbc;
         AbstractButton btn;
@@ -52,6 +51,7 @@ public class JDisclosureToolBar extends JToolBar {
             disclosureButton.putClientProperty(DisclosureIcon.CURRENT_STATE_PROPERTY, 1);
             disclosureButton.putClientProperty(DisclosureIcon.STATE_COUNT_PROPERTY, 2);
             disclosureButton.addActionListener(new ActionListener() {
+                @FeatureEntryPoint(value = "tools-display")
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     int newState = ((Integer) disclosureButton.getClientProperty(DisclosureIcon.CURRENT_STATE_PROPERTY) + 1)
