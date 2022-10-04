@@ -10,6 +10,8 @@ package org.jhotdraw.gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.gui.plaf.palette.PaletteButtonUI;
 import org.jhotdraw.gui.plaf.palette.PaletteToolBarUI;
 
@@ -34,6 +36,7 @@ public class JDisclosureToolBar extends JToolBar {
         initComponents();
     }
 
+    @FeatureEntryPoint(value = "Tools")
     private void initComponents() {
         GridBagConstraints gbc;
         AbstractButton btn;
