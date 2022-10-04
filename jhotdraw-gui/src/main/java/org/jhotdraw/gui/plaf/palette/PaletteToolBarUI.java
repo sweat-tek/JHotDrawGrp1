@@ -1077,6 +1077,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             }
         }
 
+        @FeatureEntryPoint(value = "drag-and-drop-released")
         @Override
         public void mouseReleased(MouseEvent evt) {
             if (!tb.isEnabled()) {
@@ -1273,7 +1274,6 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             isDragging = getHandler().isDragging;
         }
 
-        @FeatureEntryPoint(value = "drag-and-drop-released")
         @Override
         public void mouseReleased(MouseEvent e) {
             getHandler().tb = toolBar;
