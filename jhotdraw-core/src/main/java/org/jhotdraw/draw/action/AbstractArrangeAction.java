@@ -10,9 +10,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 public abstract class AbstractArrangeAction extends AbstractSelectedAction {
-
-    private static final long serialVersionUID = 1L;
-
     abstract String getID();
 
     /**

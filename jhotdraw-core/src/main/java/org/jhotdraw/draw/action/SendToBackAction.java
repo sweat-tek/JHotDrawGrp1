@@ -47,7 +47,7 @@ public class SendToBackAction extends AbstractArrangeAction {
 
     public static void sendToBack(DrawingView view, Collection<Figure> figures) {
         Drawing drawing = view.getDrawing();
-        for (Figure figure : figures) { // XXX Shouldn't the figures be sorted here back to front?
+        for (Figure figure : figures) {
             drawing.sendToBack(figure);
         }
     }
@@ -59,8 +59,7 @@ public class SendToBackAction extends AbstractArrangeAction {
 
             @Override
             public String getPresentationName() {
-                ResourceBundleUtil labels
-                        = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
                 return labels.getTextProperty(ID);
             }
 
