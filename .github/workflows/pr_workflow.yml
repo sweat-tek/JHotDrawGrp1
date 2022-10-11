@@ -14,4 +14,7 @@ jobs:
         distribution: 'adopt'
         cache: maven
     - name: Build and test with Maven
-      run: mvn -s $GITHUB_WORKSPACE/settings.xml --batch-mode --update-snapshots verify
+      run: mvn --batch-mode --update-snapshots verify
+      env:
+        USER_NAME: ${{ secrets.SECRET_USER_NAME }}
+        ACCESS_TOKEN: ${{ secrets.SECRET_ACCESS_TOKEN }}
