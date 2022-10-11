@@ -145,11 +145,4 @@
 			<url>https://maven.pkg.github.com/sweat-tek/MavenRepository</url>
 		</repository>
 	</repositories>
-	<servers>
-		<server>
-			<id>github</id>
-			<username>NicolajAaH</username>
-			<password>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</password>
-		</server>
-	</servers>
 </project>
