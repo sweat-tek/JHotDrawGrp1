@@ -31,5 +31,4 @@
             <password>${SECRET_USER_TOKEN}</password>
         </server>
     </servers>
-
 </settings>
