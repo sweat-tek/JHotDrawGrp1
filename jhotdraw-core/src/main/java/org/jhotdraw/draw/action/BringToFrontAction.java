@@ -54,7 +54,7 @@ public class BringToFrontAction extends AbstractArrangeAction {
 
     @Override
     AbstractUndoableEdit createUndoableEdit(DrawingView view, LinkedList<Figure> figures) {
-        return new AbstractUndoableEdit() {
+        return new AbstractUndoableEdit() { //TODO should this be refactored further?
             private static final long serialVersionUID = 1L;
 
             @Override
