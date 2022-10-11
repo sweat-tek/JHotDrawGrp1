@@ -6,6 +6,14 @@ jobs:
   buildAndTest:
     runs-on: ubuntu-latest
     steps:
+    - uses: s4u/maven-settings-action@v2.3.0
+      with:
+        servers: |
+          [{
+              "id": "github-library-project-b",
+              "username": "${{ secrets.USER_PACKAGE_READ }}",
+              "password": "${{ secrets.TOKEN_PACKAGE_READ }}"
+          }]
     - uses: actions/checkout@v3
     - name: Set up JDK 11
       uses: actions/setup-java@v3
