@@ -10,7 +10,7 @@ jobs:
       with:
         servers: |
           [{
-              "id": "github-library-project-b",
+              "id": "github",
               "username": "${{ secrets.USER_PACKAGE_READ }}",
               "password": "${{ secrets.TOKEN_PACKAGE_READ }}"
           }]
