@@ -12,8 +12,10 @@
             <repositories>
                 <repository>
                     <id>github</id>
-                    <name>GitHub TobseF Apache Maven Packages</name>
-                    <url>https://maven.pkg.github.com/TobseF</url>
+                    <url>https://maven.pkg.github.com/sweat-tek/MavenRepository</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
                 </repository>
             </repositories>
         </profile>
