@@ -8,13 +8,13 @@
 package org.jhotdraw.draw.action;
 
 import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
 
-import java.util.*;
-import javax.swing.undo.*;
-
-import org.jhotdraw.draw.*;
-import org.jhotdraw.util.ResourceBundleUtil;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * ToFrontAction.
@@ -22,7 +22,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class BringToFrontAction extends AbstractArrangeAction {
+public class BringToFrontAction extends AbstractArrangeAction{
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.bringToFront";
@@ -53,27 +53,12 @@ public class BringToFrontAction extends AbstractArrangeAction {
     }
 
     @Override
-    AbstractUndoableEdit createUndoableEdit(DrawingView view, LinkedList<Figure> figures) {
-        return new AbstractUndoableEdit() { //TODO should this be refactored further?
-            private static final long serialVersionUID = 1L;
+    public void redoAction(DrawingView view, LinkedList<Figure> figures) {
+        BringToFrontAction.bringToFront(view, figures);
+    }
 
-            @Override
-            public String getPresentationName() {
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                return labels.getTextProperty(ID);
-            }
-
-            @Override
-            public void redo() throws CannotRedoException {
-                super.redo();
-                BringToFrontAction.bringToFront(view, figures);
-            }
-
-            @Override
-            public void undo() throws CannotUndoException {
-                super.undo();
-                SendToBackAction.sendToBack(view, figures);
-            }
-        };
+    @Override
+    public void undoAction(DrawingView view, LinkedList<Figure> figures) {
+        SendToBackAction.sendToBack(view, figures);
     }
 }
