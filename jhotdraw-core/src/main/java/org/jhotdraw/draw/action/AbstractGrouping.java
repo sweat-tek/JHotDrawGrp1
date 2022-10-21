@@ -1,26 +1,17 @@
 package org.jhotdraw.draw.action;
 
-// import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.CompositeFigure;
-// import org.jhotdraw.draw.figure.GroupFigure;
-
 import java.util.*;
-// import javax.swing.undo.*;
-
 import org.jhotdraw.draw.*;
-// import org.jhotdraw.util.ResourceBundleUtil;
 
 public abstract class AbstractGrouping extends AbstractSelectedAction {
 
-    protected CompositeFigure prototype;
+    protected CompositeFigure compositeFigure;
     public final DrawingView view = getView();
 
     /**
-     * Creates an action which acts on the selected figures on the current view
-     * of the specified editor.
-     *
-     * @param editor
+     * This Abstract class can be extended into a Group og Ungroup action
      */
     public AbstractGrouping(DrawingEditor editor) {
         super(editor);
@@ -50,4 +41,13 @@ public abstract class AbstractGrouping extends AbstractSelectedAction {
         group.changed();
         view.addToSelection(group);
     }
+
+    protected int selectionCount() {
+        if (view != null) {
+            return view.getSelectionCount();
+        }
+        return 0;
+    }
+
+    abstract void generateUndo(CompositeFigure group, LinkedList<Figure> ungroupedFigures);
 }
