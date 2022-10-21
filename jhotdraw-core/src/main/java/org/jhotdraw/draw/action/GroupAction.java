@@ -29,6 +29,9 @@ public class GroupAction extends AbstractSelectedAction {
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.groupSelection";
     private CompositeFigure prototype;
+
+    private final DrawingView view = getView();
+
     /**
      * If this variable is true, this action groups figures.
      * If this variable is false, this action ungroups figures.
@@ -58,7 +61,7 @@ public class GroupAction extends AbstractSelectedAction {
 
     @Override
     protected void updateEnabledState() {
-        if (getView() != null) {
+        if (view != null) {
             setEnabled(isGroupingAction ? canGroup() : canUngroup());
         } else {
             setEnabled(false);
@@ -66,15 +69,15 @@ public class GroupAction extends AbstractSelectedAction {
     }
 
     protected boolean canGroup() {
-        return getView() != null && getView().getSelectionCount() > 1;
+        return view != null
+                && view.getSelectionCount() > 1;
     }
 
     protected boolean canUngroup() {
-        return getView() != null
-                && getView().getSelectionCount() == 1
+        return view != null
+                && view.getSelectionCount() == 1
                 && prototype != null
-                && getView().getSelectedFigures().iterator().next().getClass().equals(
-                prototype.getClass());
+                && view.getSelectedFigures().iterator().next().getClass().equals(prototype.getClass());
     }
 
     @FeatureEntryPoint(value = "GroupAction")
@@ -82,7 +85,6 @@ public class GroupAction extends AbstractSelectedAction {
     public void actionPerformed(java.awt.event.ActionEvent e) {
         if (isGroupingAction) {
             if (canGroup()) {
-                final DrawingView view = getView();
                 final LinkedList<Figure> ungroupedFigures = new LinkedList<>(view.getSelectedFigures());
                 final CompositeFigure group = (CompositeFigure) prototype.clone();
                 UndoableEdit edit = new AbstractUndoableEdit() {
@@ -117,8 +119,7 @@ public class GroupAction extends AbstractSelectedAction {
             }
         } else {
             if (canUngroup()) {
-                final DrawingView view = getView();
-                final CompositeFigure group = (CompositeFigure) getView().getSelectedFigures().iterator().next();
+                final CompositeFigure group = (CompositeFigure) view.getSelectedFigures().iterator().next();
                 final LinkedList<Figure> ungroupedFigures = new LinkedList<>();
                 UndoableEdit edit = new AbstractUndoableEdit() {
                     private static final long serialVersionUID = 1L;
