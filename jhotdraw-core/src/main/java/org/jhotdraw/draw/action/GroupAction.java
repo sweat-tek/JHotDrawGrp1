@@ -11,8 +11,10 @@ import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.CompositeFigure;
 import org.jhotdraw.draw.figure.GroupFigure;
+
 import java.util.*;
 import javax.swing.undo.*;
+
 import org.jhotdraw.draw.*;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -72,7 +74,7 @@ public class GroupAction extends AbstractSelectedAction {
                 && getView().getSelectionCount() == 1
                 && prototype != null
                 && getView().getSelectedFigures().iterator().next().getClass().equals(
-                        prototype.getClass());
+                prototype.getClass());
     }
 
     @FeatureEntryPoint(value = "GroupAction")
@@ -140,6 +142,7 @@ public class GroupAction extends AbstractSelectedAction {
                         super.undo();
                     }
                 };
+
                 ungroupedFigures.addAll(ungroupFigures(view, group));
                 fireUndoableEditHappened(edit);
             }
