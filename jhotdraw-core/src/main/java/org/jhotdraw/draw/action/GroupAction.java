@@ -24,34 +24,26 @@ import org.jhotdraw.util.ResourceBundleUtil;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GroupAction extends AbstractSelectedAction {
+public class GroupAction extends AbstractGrouping {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.groupSelection";
-    private CompositeFigure prototype;
 
-    public final DrawingView view = getView();
 
     /**
      * If this variable is true, this action groups figures.
      * If this variable is false, this action ungroups figures.
      */
-    private boolean isGroupingAction;
+    private boolean isGroupingAction = true;
 
     public GroupAction(DrawingEditor editor) {
-        this(editor, new GroupFigure(), true);
+        this(editor, new GroupFigure());
     }
 
     public GroupAction(DrawingEditor editor, CompositeFigure prototype) {
-        this(editor, prototype, true);
-    }
-
-    public GroupAction(DrawingEditor editor, CompositeFigure prototype, boolean isGroupingAction) {
         super(editor);
         this.prototype = prototype;
-        this.isGroupingAction = isGroupingAction;
-        ResourceBundleUtil labels
-                = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
         labels.configureAction(this, ID);
         updateEnabledState();
     }
@@ -59,7 +51,7 @@ public class GroupAction extends AbstractSelectedAction {
     @Override
     protected void updateEnabledState() {
         if (view != null) {
-            setEnabled(isGroupingAction ? canGroup() : canUngroup());
+            setEnabled(canGroup());
         } else {
             setEnabled(false);
         }
@@ -97,14 +89,6 @@ public class GroupAction extends AbstractSelectedAction {
             groupFigures(group, ungroupedFigures);
             fireUndoableEditHappened(groupUndoableEdit);
         }
-
-        if (!isGroupingAction && canUngroup()) {
-            CompositeFigure group = (CompositeFigure) view.getSelectedFigures().iterator().next();
-            LinkedList<Figure> ungroupedFigures = new LinkedList<>();
-            UndoableEdit unGroupUndoableEdit = getUnGroupUndoableEdit(group, ungroupedFigures);
-            ungroupedFigures.addAll(ungroupFigures(group));
-            fireUndoableEditHappened(unGroupUndoableEdit);
-        }
     }
 
     private AbstractUndoableEdit getUnGroupUndoableEdit(CompositeFigure group, LinkedList<Figure> ungroupedFigures) {
@@ -138,8 +122,7 @@ public class GroupAction extends AbstractSelectedAction {
 
             @Override
             public String getPresentationName() {
-                ResourceBundleUtil labels
-                        = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
                 return labels.getString("edit.groupSelection.text");
             }
 
@@ -160,31 +143,5 @@ public class GroupAction extends AbstractSelectedAction {
                 return super.addEdit(anEdit);
             }
         };
-    }
-
-    public Collection<Figure> ungroupFigures(CompositeFigure group) {
-// XXX - This code is redundant with UngroupAction
-        LinkedList<Figure> figures = new LinkedList<>(group.getChildren());
-        view.clearSelection();
-        group.basicRemoveAllChildren();
-        view.getDrawing().basicAddAll(view.getDrawing().indexOf(group), figures);
-        view.getDrawing().remove(group);
-        view.addToSelection(figures);
-        return figures;
-    }
-
-    public void groupFigures(CompositeFigure group, Collection<Figure> figures) {
-        Collection<Figure> sorted = view.getDrawing().sort(figures);
-        int index = view.getDrawing().indexOf(sorted.iterator().next());
-        view.getDrawing().basicRemoveAll(figures);
-        view.clearSelection();
-        view.getDrawing().add(index, group);
-        group.willChange();
-        for (Figure f : sorted) {
-            f.willChange();
-            group.basicAdd(f);
-        }
-        group.changed();
-        view.addToSelection(group);
     }
 }
