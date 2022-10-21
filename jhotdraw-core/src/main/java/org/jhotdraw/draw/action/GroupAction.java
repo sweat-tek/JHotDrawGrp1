@@ -30,7 +30,7 @@ public class GroupAction extends AbstractSelectedAction {
     public static final String ID = "edit.groupSelection";
     private CompositeFigure prototype;
 
-    private final DrawingView view = getView();
+    public final DrawingView view = getView();
 
     /**
      * If this variable is true, this action groups figures.
@@ -100,12 +100,12 @@ public class GroupAction extends AbstractSelectedAction {
                     @Override
                     public void redo() throws CannotRedoException {
                         super.redo();
-                        groupFigures(view, group, ungroupedFigures);
+                        groupFigures(group, ungroupedFigures);
                     }
 
                     @Override
                     public void undo() throws CannotUndoException {
-                        ungroupFigures(view, group);
+                        ungroupFigures(group);
                         super.undo();
                     }
 
@@ -114,7 +114,7 @@ public class GroupAction extends AbstractSelectedAction {
                         return super.addEdit(anEdit);
                     }
                 };
-                groupFigures(view, group, ungroupedFigures);
+                groupFigures(group, ungroupedFigures);
                 fireUndoableEditHappened(edit);
             }
         } else {
@@ -134,23 +134,23 @@ public class GroupAction extends AbstractSelectedAction {
                     @Override
                     public void redo() throws CannotRedoException {
                         super.redo();
-                        ungroupFigures(view, group);
+                        ungroupFigures(group);
                     }
 
                     @Override
                     public void undo() throws CannotUndoException {
-                        groupFigures(view, group, ungroupedFigures);
+                        groupFigures(group, ungroupedFigures);
                         super.undo();
                     }
                 };
 
-                ungroupedFigures.addAll(ungroupFigures(view, group));
+                ungroupedFigures.addAll(ungroupFigures(group));
                 fireUndoableEditHappened(edit);
             }
         }
     }
 
-    public Collection<Figure> ungroupFigures(DrawingView view, CompositeFigure group) {
+    public Collection<Figure> ungroupFigures(CompositeFigure group) {
 // XXX - This code is redundant with UngroupAction
         LinkedList<Figure> figures = new LinkedList<>(group.getChildren());
         view.clearSelection();
@@ -161,7 +161,7 @@ public class GroupAction extends AbstractSelectedAction {
         return figures;
     }
 
-    public void groupFigures(DrawingView view, CompositeFigure group, Collection<Figure> figures) {
+    public void groupFigures(CompositeFigure group, Collection<Figure> figures) {
         Collection<Figure> sorted = view.getDrawing().sort(figures);
         int index = view.getDrawing().indexOf(sorted.iterator().next());
         view.getDrawing().basicRemoveAll(figures);
