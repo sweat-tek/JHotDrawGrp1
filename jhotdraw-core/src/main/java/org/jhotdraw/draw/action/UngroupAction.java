@@ -25,7 +25,7 @@ import java.util.LinkedList;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class UngroupAction extends AbstractGrouping {
+public class UngroupAction extends AbstractGroupingAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.ungroupSelection";
