@@ -5,7 +5,7 @@ import org.jhotdraw.draw.figure.CompositeFigure;
 import java.util.*;
 import org.jhotdraw.draw.*;
 
-public abstract class AbstractGrouping extends AbstractSelectedAction {
+public abstract class AbstractGroupingAction extends AbstractSelectedAction {
 
     protected CompositeFigure compositeFigure;
     public final DrawingView view = getView();
@@ -13,7 +13,7 @@ public abstract class AbstractGrouping extends AbstractSelectedAction {
     /**
      * This Abstract class can be extended into a Group og Ungroup action
      */
-    public AbstractGrouping(DrawingEditor editor) {
+    public AbstractGroupingAction(DrawingEditor editor) {
         super(editor);
     }
 

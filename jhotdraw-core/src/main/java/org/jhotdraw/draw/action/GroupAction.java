@@ -24,7 +24,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class GroupAction extends AbstractGrouping {
+public class GroupAction extends AbstractGroupingAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.groupSelection";
