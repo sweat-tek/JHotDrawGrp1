@@ -26,6 +26,7 @@ public class SendToBackAction extends AbstractArrangeAction{
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.sendToBack";
+    private BringToFrontAction bringToFrontAction;
 
     @Override
     String getID() {
@@ -39,13 +40,27 @@ public class SendToBackAction extends AbstractArrangeAction{
         super(editor);
     }
 
+    public void setBringToFrontAction(BringToFrontAction bringToFrontAction) {
+        this.bringToFrontAction = bringToFrontAction;
+    }
+
     @FeatureEntryPoint(value = "SendToBack")
     @Override
     void action(DrawingView view, Collection<Figure> figures) {
+        assert view != null;
+        assert figures != null;
+
         sendToBack(view, figures);
     }
 
-    public static void sendToBack(DrawingView view, Collection<Figure> figures) {
+    private void sendToBack(DrawingView view, Collection<Figure> figures) {
+        assert view != null;
+        assert figures != null;
+
+        if (figures.isEmpty()){
+            return;
+        }
+
         Drawing drawing = view.getDrawing();
         for (Figure figure : figures) {
             drawing.sendToBack(figure);
@@ -54,11 +69,20 @@ public class SendToBackAction extends AbstractArrangeAction{
 
     @Override
     public void redoAction(DrawingView view, LinkedList<Figure> figures) {
-        SendToBackAction.sendToBack(view, figures);
+        assert view != null;
+        assert figures != null;
+
+        sendToBack(view, figures);
     }
 
     @Override
     public void undoAction(DrawingView view, LinkedList<Figure> figures) {
-        BringToFrontAction.bringToFront(view, figures);
+        assert view != null;
+        assert figures != null;
+
+        if (bringToFrontAction == null) {
+            bringToFrontAction = new BringToFrontAction(getEditor());
+        }
+        bringToFrontAction.action(view, figures);
     }
 }
