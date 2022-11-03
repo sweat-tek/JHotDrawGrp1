@@ -28,13 +28,13 @@ public abstract class AbstractGroupingAction extends AbstractSelectedAction {
     }
 
     public void groupFigures(CompositeFigure group, Collection<Figure> figures) {
+
+        assert group != null;
+        assert figures.size() > 1;
+
         // returns a copy of the figures sorted from back to front
         Collection<Figure> sorted = view.getDrawing().sort(figures);
-
-        // Find index of 1st figure (ie the one on top)
         int index = view.getDrawing().indexOf(sorted.iterator().next());
-
-        // removes the figures from drawing and clears selection
         view.getDrawing().basicRemoveAll(figures);
         view.clearSelection();
 
@@ -47,9 +47,7 @@ public abstract class AbstractGroupingAction extends AbstractSelectedAction {
             f.willChange();
             group.basicAdd(f);
         }
-        // notify that the group have change (for redrawing)
         group.changed();
-
         view.addToSelection(group);
     }
 
