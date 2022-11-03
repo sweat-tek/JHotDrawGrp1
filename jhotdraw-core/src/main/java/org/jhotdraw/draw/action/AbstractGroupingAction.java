@@ -8,7 +8,7 @@ import org.jhotdraw.draw.*;
 public abstract class AbstractGroupingAction extends AbstractSelectedAction {
 
     protected CompositeFigure compositeFigure;
-    public final DrawingView view = getView();
+    protected DrawingView view = getView();
 
     /**
      * This Abstract class can be extended into a Group og Ungroup action
@@ -28,17 +28,28 @@ public abstract class AbstractGroupingAction extends AbstractSelectedAction {
     }
 
     public void groupFigures(CompositeFigure group, Collection<Figure> figures) {
+        // returns a copy of the figures sorted from back to front
         Collection<Figure> sorted = view.getDrawing().sort(figures);
+
+        // Find index of 1st figure (ie the one on top)
         int index = view.getDrawing().indexOf(sorted.iterator().next());
+
+        // removes the figures from drawing and clears selection
         view.getDrawing().basicRemoveAll(figures);
         view.clearSelection();
+
+        // adding the composite figure to the drawing
         view.getDrawing().add(index, group);
         group.willChange();
+
+        // Adding figures to group
         for (Figure f : sorted) {
             f.willChange();
             group.basicAdd(f);
         }
+        // notify that the group have change (for redrawing)
         group.changed();
+
         view.addToSelection(group);
     }
 
@@ -49,5 +60,9 @@ public abstract class AbstractGroupingAction extends AbstractSelectedAction {
         return 0;
     }
 
-    abstract void generateUndo(CompositeFigure group, LinkedList<Figure> ungroupedFigures);
+    public void setView(DrawingView view) {
+        this.view = view;
+    }
+
+    abstract void generateUndo(CompositeFigure group, LinkedList<Figure> figures);
 }
