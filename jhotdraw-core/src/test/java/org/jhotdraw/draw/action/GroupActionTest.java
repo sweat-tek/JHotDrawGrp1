@@ -12,21 +12,20 @@ import org.jhotdraw.draw.figure.GroupFigure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-
+// import java classes
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class GroupActionTest {
 
     GroupAction groupAction;
-    DrawingEditor drawingEditorMock = mock(DrawingEditor.class);
     CompositeFigure groupFigure;
+
+    DrawingEditor drawingEditorMock = mock(DrawingEditor.class);
     Drawing drawing = mock((Drawing.class));
     DrawingView drawingView = mock(DrawingView.class);
 
@@ -40,65 +39,55 @@ public class GroupActionTest {
     public void tearDown() throws Exception {
         groupAction = null;
     }
-/*
+
     @Test
-    public void canGroup() {
+    public void groupingFiguresTest() {
 
-        // get no of selected figures
-        int numberOfSelectedFigures = groupAction.selectionCount();
-
-        // get cangroup
-        boolean canGroup = groupAction.canGroup();
-
-        // assert that if number of selected figures i more than 1, then method returns true.
-        assertTrue("Number of selected figures lower than 1", numberOfSelectedFigures > 1 && canGroup);
-    }
-
- */
-
-
-    // Assert that composite figure that you pass has more figures after call
-    // groupFigures(CompositeFigure group, Collection<Figure> figures)
-    @Test
-    public void groupFiguresTest() {
-
-        // create a composite figure
         groupFigure = new GroupFigure();
-
-        // create list of two mocked figures
-        List<Figure> figures = new LinkedList<>();
-        Figure figure1 = mock(Figure.class);
-        Figure figure2 = mock(Figure.class);
-        figures.add(figure1);
-        figures.add(figure2);
-
+        List<Figure> figures = getTwoMockedFigures();
+        addBehaviourToMocks(figures);
 
         assertEquals(0, groupFigure.getChildCount());
-
-        // Adding behaviour to mocks
-        when(drawingView.getDrawing()).thenReturn(drawing);
-        when(drawing.sort(anyCollection())).thenReturn(figures);
-        when(drawing.indexOf(figures.iterator().next())).thenReturn(0);
-        doNothing().when(drawing).basicRemoveAll(anyCollection());
-        doNothing().when(drawingView).clearSelection();
-        doNothing().when(drawing).add(anyInt(), anyObject());
-        doNothing().when(figure1).willChange();
-        doNothing().when(figure2).willChange();
-        doNothing().when(drawingView).addToSelection((Figure) any());
-        when(figure1.getDrawingArea(anyDouble())).thenReturn(mock(Rectangle2D.Double.class));
-        when(figure2.getDrawingArea(anyDouble())).thenReturn(mock(Rectangle2D.Double.class));
-
-        // grouping figures
         groupAction.groupFigures(groupFigure, figures);
-
-        // asseting the CompositeFigure has to childrena and the composite figure is added to selection
-        assertEquals(2, groupFigure.getChildCount());
+        assertEquals("CompositeFigure not having two children", 2, groupFigure.getChildCount());
         verify(drawingView, times(1)).addToSelection((CompositeFigure) anyObject());
     }
 
+    private void addBehaviourToMocks(List<Figure> figures) {
+        // drawingView Mock
+        when(drawingView.getDrawing()).thenReturn(drawing);
+        doNothing().when(drawingView).clearSelection();
+        doNothing().when(drawingView).addToSelection((Figure) any());
+
+        // drawing Mock
+        when(drawing.sort(anyCollection())).thenReturn(figures);
+        when(drawing.indexOf(figures.iterator().next())).thenReturn(0);
+        doNothing().when(drawing).basicRemoveAll(anyCollection());
+        doNothing().when(drawing).add(anyInt(), anyObject());
+    }
+
+    private List<Figure> getTwoMockedFigures() {
+
+        // Generate mock of two figures + behaviour
+        Figure figure1 = mock(Figure.class);
+        Figure figure2 = mock(Figure.class);
+        when(figure1.getDrawingArea(anyDouble())).thenReturn(mock(Rectangle2D.Double.class));
+        when(figure2.getDrawingArea(anyDouble())).thenReturn(mock(Rectangle2D.Double.class));
+        doNothing().when(figure1).willChange();
+        doNothing().when(figure2).willChange();
+
+        // adding them to list
+        List<Figure> figures = new LinkedList<>();
+        figures.add(figure1);
+        figures.add(figure2);
+
+        return figures;
+    }
+
+    // boundary case
     @Test
-    public void testJunit() {
-        int x = 0;
-        assertTrue("not true", x==0);
+    public void testGroupingWithSelectionOfOneFigure() {
+        when(drawingView.getSelectionCount()).thenReturn(1);
+        assertFalse("should not be able to group with only 1 figure selected", groupAction.canGroup());
     }
 }

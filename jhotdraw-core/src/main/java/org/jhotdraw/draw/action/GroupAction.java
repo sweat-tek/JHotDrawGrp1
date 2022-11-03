@@ -57,6 +57,7 @@ public class GroupAction extends AbstractGroupingAction {
     @FeatureEntryPoint(value = "GroupAction")
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
+        assert view != null;
         if (canGroup()) {
             LinkedList<Figure> ungroupedFigures = new LinkedList<>(view.getSelectedFigures());
             CompositeFigure group = (CompositeFigure) compositeFigure.clone();
