@@ -68,12 +68,12 @@ public class GroupAction extends AbstractGroupingAction {
     }
 
     @Override
-    void undoAction(LinkedList<Figure> figures, CompositeFigure group) {
+    void undoAction(Collection<Figure> figures, CompositeFigure group) {
         ungroupFigures(group);
     }
 
     @Override
-    void redoAction(LinkedList<Figure> figures, CompositeFigure group) {
+    void redoAction(Collection<Figure> figures, CompositeFigure group) {
         groupFigures(group, figures);
     }
 }
