@@ -13,7 +13,6 @@ import org.jhotdraw.draw.figure.CompositeFigure;
 import org.jhotdraw.draw.figure.GroupFigure;
 
 import java.util.*;
-import javax.swing.undo.*;
 
 import org.jhotdraw.draw.*;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -32,6 +31,8 @@ public class GroupAction extends AbstractGroupingAction {
     public GroupAction(DrawingEditor editor) {
         this(editor, new GroupFigure());
     }
+
+
 
     public GroupAction(DrawingEditor editor, CompositeFigure compositeFigure) {
         super(editor);
@@ -67,37 +68,12 @@ public class GroupAction extends AbstractGroupingAction {
     }
 
     @Override
-    protected void generateUndo(CompositeFigure group, LinkedList<Figure> ungroupedFigures) {
-        UndoableEdit groupUndoableEdit = getGroupUnduableEdit(ungroupedFigures, group);
-        fireUndoableEditHappened(groupUndoableEdit);
+    void undoAction(LinkedList<Figure> figures, CompositeFigure group) {
+        ungroupFigures(group);
     }
 
-    private AbstractUndoableEdit getGroupUnduableEdit(LinkedList<Figure> ungroupedFigures, CompositeFigure group) {
-        return new AbstractUndoableEdit() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getPresentationName() {
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                return labels.getString("edit.groupSelection.text");
-            }
-
-            @Override
-            public void redo() throws CannotRedoException {
-                super.redo();
-                groupFigures(group, ungroupedFigures);
-            }
-
-            @Override
-            public void undo() throws CannotUndoException {
-                ungroupFigures(group);
-                super.undo();
-            }
-
-            @Override
-            public boolean addEdit(UndoableEdit anEdit) {
-                return super.addEdit(anEdit);
-            }
-        };
+    @Override
+    void redoAction(LinkedList<Figure> figures, CompositeFigure group) {
+        groupFigures(group, figures);
     }
 }
