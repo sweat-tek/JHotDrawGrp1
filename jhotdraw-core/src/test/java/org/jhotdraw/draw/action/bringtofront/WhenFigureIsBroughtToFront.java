@@ -6,19 +6,14 @@ import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.annotation.ScenarioState;
 import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.figure.Figure;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class WhenFigureIsBringToFront extends Stage<WhenFigureIsBringToFront> {
+public class WhenFigureIsBroughtToFront extends Stage<WhenFigureIsBroughtToFront> {
 
-    @Autowired
     @ScenarioState
     private BringToFrontAction bringToFrontAction;
 
@@ -46,7 +41,7 @@ public class WhenFigureIsBringToFront extends Stage<WhenFigureIsBringToFront> {
         nonselectedFigures.removeAll(selectedFigures);
     }
 
-    public WhenFigureIsBringToFront figureIsBringToFront(){
+    public WhenFigureIsBroughtToFront figureIsBroughtToFront(){
         bringToFrontAction.action(editor.getActiveView(), selectedFigures);
 
         return self();

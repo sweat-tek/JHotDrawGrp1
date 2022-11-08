@@ -7,7 +7,7 @@ import org.junit.Test;
 public class SendToBackBehaviorTest extends ScenarioTest<GivenFigureSelected, WhenFigureIsSentToBack, ThenFigureIsInBack> {
     @Test
     public void figureIsSentToBack(){
-        given().figureIsSelected();
+        given().aFigureIsSelectedAndSomeAreUnselected();
         when().figureIsSentToBack();
         then().figureIsInBack();
     }

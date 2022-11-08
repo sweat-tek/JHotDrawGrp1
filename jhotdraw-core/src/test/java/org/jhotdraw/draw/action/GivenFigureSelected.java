@@ -20,7 +20,7 @@ public class GivenFigureSelected extends Stage<GivenFigureSelected> {
     }
 
 
-    public GivenFigureSelected figureIsSelected(){
+    public GivenFigureSelected aFigureIsSelectedAndSomeAreUnselected(){
         Figure figure1 = new DiamondFigure();
         Figure figure2 = new DiamondFigure();
         Figure figure3 = new DiamondFigure();

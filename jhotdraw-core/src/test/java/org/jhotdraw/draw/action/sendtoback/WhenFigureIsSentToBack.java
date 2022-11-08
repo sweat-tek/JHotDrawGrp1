@@ -6,17 +6,14 @@ import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.annotation.ScenarioState;
 import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;
 import org.jhotdraw.draw.figure.Figure;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class WhenFigureIsSentToBack extends Stage<WhenFigureIsSentToBack> {
 
-    @Autowired
     @ScenarioState
     private SendToBackAction sendToBackAction;
 
