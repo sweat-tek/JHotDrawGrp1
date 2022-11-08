@@ -4,6 +4,12 @@ import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.CompositeFigure;
 import java.util.*;
 import org.jhotdraw.draw.*;
+import org.jhotdraw.util.ResourceBundleUtil;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
 
 public abstract class AbstractGroupingAction extends AbstractSelectedAction {
 
@@ -62,5 +68,42 @@ public abstract class AbstractGroupingAction extends AbstractSelectedAction {
         this.view = view;
     }
 
-    abstract void generateUndo(CompositeFigure group, LinkedList<Figure> figures);
+    abstract void undoAction(LinkedList<Figure> figures, CompositeFigure group);
+    abstract void redoAction(LinkedList<Figure> figures, CompositeFigure group);
+
+    public void generateUndo(CompositeFigure group, LinkedList<Figure> figures) {
+        UndoableEdit groupUndoableEdit = getGroupUnduableEdit(figures, group);
+        fireUndoableEditHappened(groupUndoableEdit);
+    }
+
+    public AbstractUndoableEdit getGroupUnduableEdit(LinkedList<Figure> figures, CompositeFigure group) {
+        return new AbstractUndoableEdit() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public String getPresentationName() {
+                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                return labels.getString("edit.groupSelection.text");
+            }
+
+            @Override
+            public void redo() throws CannotRedoException {
+                super.redo();
+                redoAction(figures, group);
+            }
+
+            @Override
+            public void undo() throws CannotUndoException {
+                undoAction(figures, group);
+                super.undo();
+            }
+
+            @Override
+            public boolean addEdit(UndoableEdit anEdit) {
+                return super.addEdit(anEdit);
+            }
+        };
+    }
+
+
 }

@@ -13,10 +13,6 @@ import org.jhotdraw.draw.figure.GroupFigure;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.util.ResourceBundleUtil;
 
-import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.UndoableEdit;
 import java.util.LinkedList;
 
 /**
@@ -73,33 +69,12 @@ public class UngroupAction extends AbstractGroupingAction {
     }
 
     @Override
-    protected void generateUndo(CompositeFigure group, LinkedList<Figure> ungroupedFigures) {
-        UndoableEdit unGroupUndoableEdit = getUnGroupUndoableEdit(group, ungroupedFigures);
-        fireUndoableEditHappened(unGroupUndoableEdit);
+    void undoAction(LinkedList<Figure> figures, CompositeFigure group) {
+        groupFigures(group, figures);
     }
 
-    private AbstractUndoableEdit getUnGroupUndoableEdit(CompositeFigure group, LinkedList<Figure> ungroupedFigures) {
-        return new AbstractUndoableEdit() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getPresentationName() {
-                ResourceBundleUtil labels
-                        = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                return labels.getString("edit.ungroupSelection.text");
-            }
-
-            @Override
-            public void redo() throws CannotRedoException {
-                super.redo();
-                ungroupFigures(group);
-            }
-
-            @Override
-            public void undo() throws CannotUndoException {
-                groupFigures(group, ungroupedFigures);
-                super.undo();
-            }
-        };
+    @Override
+    void redoAction(LinkedList<Figure> figures, CompositeFigure group) {
+        ungroupFigures(group);
     }
 }
