@@ -58,9 +58,14 @@ public class JDisclosureToolBar extends JToolBar {
     }
 
     private void onPaletteButtonPressed(){
-        int newState = ((Integer) disclosureButton.getClientProperty(DisclosureIcon.CURRENT_STATE_PROPERTY) + 1)
-                % (Integer) disclosureButton.getClientProperty(DisclosureIcon.STATE_COUNT_PROPERTY);
+        int currentState = (int) disclosureButton.getClientProperty(DisclosureIcon.CURRENT_STATE_PROPERTY);
+        int stateCount = (int) disclosureButton.getClientProperty(DisclosureIcon.STATE_COUNT_PROPERTY);
+        int newState = calculateNewState(currentState, stateCount);
         setDisclosureState(newState);
+    }
+
+    private int calculateNewState(int currentState, int stateCount){
+        return (currentState + 1) % stateCount;
     }
 
     public void setDisclosureStateCount(int newValue) {
