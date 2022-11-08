@@ -13,6 +13,7 @@ import org.jhotdraw.draw.figure.GroupFigure;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.util.ResourceBundleUtil;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 /**
@@ -69,12 +70,12 @@ public class UngroupAction extends AbstractGroupingAction {
     }
 
     @Override
-    void undoAction(LinkedList<Figure> figures, CompositeFigure group) {
+    void undoAction(Collection<Figure> figures, CompositeFigure group) {
         groupFigures(group, figures);
     }
 
     @Override
-    void redoAction(LinkedList<Figure> figures, CompositeFigure group) {
+    void redoAction(Collection<Figure> figures, CompositeFigure group) {
         ungroupFigures(group);
     }
 }

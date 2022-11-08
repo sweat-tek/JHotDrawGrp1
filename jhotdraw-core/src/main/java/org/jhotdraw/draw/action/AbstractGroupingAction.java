@@ -68,42 +68,45 @@ public abstract class AbstractGroupingAction extends AbstractSelectedAction {
         this.view = view;
     }
 
-    abstract void undoAction(LinkedList<Figure> figures, CompositeFigure group);
-    abstract void redoAction(LinkedList<Figure> figures, CompositeFigure group);
+    abstract void undoAction(Collection<Figure> figures, CompositeFigure group);
+    abstract void redoAction(Collection<Figure> figures, CompositeFigure group);
 
     public void generateUndo(CompositeFigure group, LinkedList<Figure> figures) {
-        UndoableEdit groupUndoableEdit = getGroupUnduableEdit(figures, group);
-        fireUndoableEditHappened(groupUndoableEdit);
+        fireUndoableEditHappened(new groupingUndoableEdit(figures, group));
     }
 
-    public AbstractUndoableEdit getGroupUnduableEdit(LinkedList<Figure> figures, CompositeFigure group) {
-        return new AbstractUndoableEdit() {
-            private static final long serialVersionUID = 1L;
+    private class groupingUndoableEdit extends AbstractUndoableEdit {
 
-            @Override
-            public String getPresentationName() {
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                return labels.getString("edit.groupSelection.text");
-            }
+        private CompositeFigure group;
+        private Collection<Figure> figures;
+        private static final long serialVersionUID = 1L;
 
-            @Override
-            public void redo() throws CannotRedoException {
-                super.redo();
-                redoAction(figures, group);
-            }
+        public groupingUndoableEdit(Collection<Figure> figures, CompositeFigure group) {
+            this.group = group;
+            this.figures = figures;
+        }
 
-            @Override
-            public void undo() throws CannotUndoException {
-                undoAction(figures, group);
-                super.undo();
-            }
+        @Override
+        public String getPresentationName() {
+            ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+            return labels.getString("edit.groupSelection.text");
+        }
 
-            @Override
-            public boolean addEdit(UndoableEdit anEdit) {
-                return super.addEdit(anEdit);
-            }
-        };
+        @Override
+        public void redo() throws CannotRedoException {
+            super.redo();
+            redoAction(figures, group);
+        }
+
+        @Override
+        public void undo() throws CannotUndoException {
+            undoAction(figures, group);
+            super.undo();
+        }
+
+        @Override
+        public boolean addEdit(UndoableEdit anEdit) {
+            return super.addEdit(anEdit);
+        }
     }
-
-
 }
