@@ -23,7 +23,7 @@ public class ThenGrouped extends Stage<ThenGrouped> {
     @ExpectedScenarioState
     List<Figure> figures;
 
-    public ThenGrouped figuresGrouped() {
+    public ThenGrouped figuresAreGrouped() {
         // assert only one child in the drawing view (the two children has been grouped)
         int figureCount = drawingEditor.getActiveView().getDrawing().getChildren().size();
         assertEquals(1, figureCount);

@@ -6,9 +6,7 @@ import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.figure.Figure;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +32,7 @@ public class WhenGrouping extends Stage<WhenGrouping> {
 
     }
 
-    WhenGrouping groupFigures() {
+    WhenGrouping groupingFigures() {
         groupAction.actionPerformed(null);
         return this;
     }

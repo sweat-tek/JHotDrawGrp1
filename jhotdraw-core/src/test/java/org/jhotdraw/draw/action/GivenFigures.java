@@ -4,7 +4,6 @@ import com.tngtech.jgiven.annotation.BeforeStage;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 
 import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.figure.BezierFigure;
 import org.jhotdraw.draw.figure.DiamondFigure;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.RectangleFigure;
