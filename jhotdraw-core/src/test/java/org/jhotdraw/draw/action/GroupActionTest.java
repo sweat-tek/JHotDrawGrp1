@@ -1,6 +1,5 @@
 package org.jhotdraw.draw.action;
 
-
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
@@ -24,7 +23,6 @@ public class GroupActionTest {
 
     GroupAction groupAction;
     CompositeFigure groupFigure;
-
     DrawingEditor drawingEditorMock = mock(DrawingEditor.class);
     Drawing drawing = mock((Drawing.class));
     DrawingView drawingView = mock(DrawingView.class);
@@ -67,7 +65,6 @@ public class GroupActionTest {
     }
 
     private List<Figure> getTwoMockedFigures() {
-
         // Generate mock of two figures + behaviour
         Figure figure1 = mock(Figure.class);
         Figure figure2 = mock(Figure.class);
