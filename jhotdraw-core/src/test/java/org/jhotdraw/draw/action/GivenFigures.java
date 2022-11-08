@@ -18,7 +18,6 @@ public class GivenFigures {
         drawingEditor = new DefaultDrawingEditor();
         DrawingView drawingView = new DefaultDrawingView();
         Drawing drawing = new DefaultDrawing();
-
         drawingView.setDrawing(drawing);
         drawingEditor.setActiveView(drawingView);
     }
