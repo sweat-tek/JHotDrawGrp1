@@ -46,7 +46,7 @@ public class SendToBackAction extends AbstractArrangeAction{
 
     @FeatureEntryPoint(value = "SendToBack")
     @Override
-    void action(DrawingView view, Collection<Figure> figures) {
+    public void action(DrawingView view, Collection<Figure> figures) {
         assert view != null;
         assert figures != null;
 
