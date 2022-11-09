@@ -68,6 +68,18 @@ public class JDisclosureToolBar extends JToolBar {
         return (currentState + 1) % stateCount;
     }
 
+    private GridBagConstraints createDisclosureButtonGridConstraints(){
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.insets = new Insets(0, 1, 0, 1);
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weighty = 1d;
+        gbc.weightx = 1d;
+        return gbc;
+    }
+
+
     public void setDisclosureStateCount(int newValue) {
         setDisclosureStateProperty(newValue, DisclosureIcon.STATE_COUNT_PROPERTY, DISCLOSURE_STATE_COUNT_PROPERTY);
     }
@@ -115,17 +127,6 @@ public class JDisclosureToolBar extends JToolBar {
         }
 
         parent.validate();
-    }
-
-    private GridBagConstraints createDisclosureButtonGridConstraints(){
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.insets = new Insets(0, 1, 0, 1);
-        gbc.anchor = GridBagConstraints.SOUTHWEST;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weighty = 1d;
-        gbc.weightx = 1d;
-        return gbc;
     }
 
     private GridBagConstraints createDisclosedComponentGridConstraints(){
