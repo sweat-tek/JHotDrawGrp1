@@ -53,7 +53,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
     protected PropertyChangeListener propertyListener;
     protected ContainerListener toolBarContListener;
     protected FocusListener toolBarFocusListener;
-    private Handler handler;
+    private HandlerFactory handlerFactory;
     protected Integer constraintBeforeFloating = 0;
     // Rollover button implementation.
     private static String IS_ROLLOVER = "JToolBar.isRollover";
@@ -214,20 +214,20 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
     }
 
     protected void installListeners() {
-        dockingListener = createDockingListener();
+        dockingListener = getDockingListener();
         if (dockingListener != null) {
             toolBar.addMouseMotionListener(dockingListener);
             toolBar.addMouseListener(dockingListener);
         }
-        propertyListener = createPropertyListener();  // added in setFloating
+        propertyListener = getPropertyListener();  // added in setFloating
         if (propertyListener != null) {
             toolBar.addPropertyChangeListener(propertyListener);
         }
-        toolBarContListener = createToolBarContListener();
+        toolBarContListener = getContainerListener();
         if (toolBarContListener != null) {
             toolBar.addContainerListener(toolBarContListener);
         }
-        toolBarFocusListener = createToolBarFocusListener();
+        toolBarFocusListener = getFocusListener();
         if (toolBarFocusListener != null) {
             // Put focus listener on all components in toolbar
             Component[] components = toolBar.getComponents();
@@ -925,28 +925,29 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         }
     }
 
-    private Handler getHandler() {
-        if (handler == null) {
-            handler = new Handler();
+    private class HandlerFactory{
+        Handler handler = new Handler();
+
+        public Handler getHandler(){
+            return handler;
         }
-        return handler;
-    }
 
-    protected ContainerListener createToolBarContListener() {
-        return getHandler();
-    }
-
-    protected FocusListener createToolBarFocusListener() {
-        return getHandler();
-    }
-
-    protected PropertyChangeListener createPropertyListener() {
-        return getHandler();
-    }
-
-    protected MouseInputListener createDockingListener() {
-        getHandler().tb = toolBar;
-        return getHandler();
+        public ContainerListener getContainerListener() {
+            return handler;
+        }
+    
+        public FocusListener getFocusListener() {
+            return handler;
+        }
+    
+        public PropertyChangeListener getPropertyListener() {
+            return handler;
+        }
+    
+        public MouseInputListener getDockingListener() {
+            handler.tb = toolBar;
+            return handler;
+        }
     }
 
     protected WindowListener createFrameListener() {
@@ -1052,10 +1053,10 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         public void focusLost(FocusEvent evt) {
         }
         // MouseInputListener (DockingListener)
-        JToolBar tb;
-        boolean isDragging = false;
-        Point origin = null;
-        boolean isArmed = false;
+        private JToolBar tb;
+        private boolean isDragging = false;
+        private Point origin = null;
+        private boolean isArmed = false;
 
         @FeatureEntryPoint(value = "drag-and-drop-pressed")
         @Override
@@ -1072,9 +1073,14 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
                 } else {
                     insets = c.getInsets();
                 }
-                isArmed = !(evt.getX() > insets.left && evt.getX() < c.getWidth() - insets.right
-                        && evt.getY() > insets.top && evt.getY() < c.getHeight() - insets.bottom);
+                isArmed = calculateEventOutsideBounds(insets, evt.getX(), evt.getY(), c.getWidth(), c.getHeight());
             }
+        }
+
+        private boolean calculateEventOutsideBounds(Insets insets, int evtX, int evtY, int cWidth, int cHeight){
+            boolean xOutsideBounds = evtX < insets.left || evtX > cWidth - insets.right;
+            boolean yOutsideBounds = evtY < insets.top || evtY > cHeight - insets.bottom;
+            return xOutsideBounds || yOutsideBounds;
         }
 
         @FeatureEntryPoint(value = "drag-and-drop-released")
@@ -1134,32 +1140,38 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             if ("lookAndFeel".equals(propertyName)) {
                 toolBar.updateUI();
             } else if ("orientation".equals(propertyName)) {
-                // Search for JSeparator components and change it's orientation
-                // to match the toolbar and flip it's orientation.
-                Component[] components = toolBar.getComponents();
-                int orientation = ((Integer) evt.getNewValue());
-                JToolBar.Separator separator;
-                for (int i = 0; i < components.length; ++i) {
-                    if (components[i] instanceof JToolBar.Separator) {
-                        separator = (JToolBar.Separator) components[i];
-                        if ((orientation == JToolBar.HORIZONTAL)) {
-                            separator.setOrientation(JSeparator.VERTICAL);
-                        } else {
-                            separator.setOrientation(JSeparator.HORIZONTAL);
-                        }
-                        Dimension size = separator.getSeparatorSize();
-                        if (size != null && size.width != size.height) {
-                            // Flip the orientation.
-                            Dimension newSize
-                                    = new Dimension(size.height, size.width);
-                            separator.setSeparatorSize(newSize);
-                        }
-                    }
-                }
-            } else if ((propertyName == null && IS_ROLLOVER == null) || (propertyName != null && propertyName.equals(IS_ROLLOVER))) {
+                searchForSeparatorAndSetOrientation((Integer) evt.getNewValue());
+            } else if ((propertyName == null && IS_ROLLOVER == null) 
+                    || (propertyName != null && propertyName.equals(IS_ROLLOVER))) {
                 installNormalBorders(toolBar);
                 setRolloverBorders(((Boolean) evt.getNewValue()));
             }
+        }
+
+        private void searchForSeparatorAndSetOrientation(Integer orientation){
+                Component[] components = toolBar.getComponents();
+                JToolBar.Separator separator;
+                for (int i = 0; i < components.length; ++i) {
+                    if(!(components[i] instanceof JToolBar.Separator)) continue;
+                    separator = (JToolBar.Separator) components[i];
+                    setSeparatorOrientation(separator, orientation);
+                }
+        }
+
+        private void setSeparatorOrientation(JToolBar.Separator separator, Integer oldOrientation){
+            Dimension size = separator.getSeparatorSize();
+            boolean sizeNotSquare = size != null && size.width != size.height;
+
+            int newOrientation;
+
+            if(sizeNotSquare){
+                newOrientation = oldOrientation;
+            }else if(oldOrientation == JToolBar.HORIZONTAL){
+                newOrientation = JToolBar.VERTICAL;
+            }else {
+                newOrientation = JToolBar.HORIZONTAL;
+            }
+            separator.setOrientation(newOrientation);
         }
     }
 
@@ -1205,12 +1217,12 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         // class calls into the Handler.
         @Override
         public void componentAdded(ContainerEvent e) {
-            getHandler().componentAdded(e);
+            handlerFactory.getContainerListener().componentAdded(e);
         }
 
         @Override
         public void componentRemoved(ContainerEvent e) {
-            getHandler().componentRemoved(e);
+            handlerFactory.getContainerListener().componentRemoved(e);
         }
     }
 
@@ -1222,12 +1234,12 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         // class calls into the Handler.
         @Override
         public void focusGained(FocusEvent e) {
-            getHandler().focusGained(e);
+            handlerFactory.getFocusListener().focusGained(e);
         }
 
         @Override
         public void focusLost(FocusEvent e) {
-            getHandler().focusLost(e);
+            handlerFactory.getFocusListener().focusLost(e);
         }
     }
 
@@ -1239,7 +1251,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         // class calls into the Handler.
         @Override
         public void propertyChange(PropertyChangeEvent e) {
-            getHandler().propertyChange(e);
+            handlerFactory.getPropertyListener().propertyChange(e);
         }
     }
 
@@ -1259,53 +1271,53 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
 
         public DockingListener(JToolBar t) {
             this.toolBar = t;
-            getHandler().tb = t;
+            handlerFactory.getHandler().tb = t;
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            getHandler().mouseClicked(e);
+            handlerFactory.getDockingListener().mouseClicked(e);
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-            getHandler().tb = toolBar;
-            getHandler().mousePressed(e);
-            isDragging = getHandler().isDragging;
+            handlerFactory.getHandler().tb = toolBar;
+            handlerFactory.getDockingListener().mousePressed(e);
+            isDragging = handlerFactory.getHandler().isDragging;
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            getHandler().tb = toolBar;
-            getHandler().isDragging = isDragging;
-            getHandler().origin = origin;
-            getHandler().mouseReleased(e);
-            isDragging = getHandler().isDragging;
-            origin = getHandler().origin;
+            handlerFactory.getHandler().tb = toolBar;
+            handlerFactory.getHandler().isDragging = isDragging;
+            handlerFactory.getHandler().origin = origin;
+            handlerFactory.getHandler().mouseReleased(e);
+            isDragging = handlerFactory.getHandler().isDragging;
+            origin = handlerFactory.getHandler().origin;
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            getHandler().mouseEntered(e);
+            handlerFactory.getHandler().mouseEntered(e);
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            getHandler().mouseExited(e);
+            handlerFactory.getHandler().mouseExited(e);
         }
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            getHandler().tb = toolBar;
-            getHandler().origin = origin;
-            getHandler().mouseDragged(e);
-            isDragging = getHandler().isDragging;
-            origin = getHandler().origin;
+            handlerFactory.getHandler().tb = toolBar;
+            handlerFactory.getHandler().origin = origin;
+            handlerFactory.getHandler().mouseDragged(e);
+            isDragging = handlerFactory.getHandler().isDragging;
+            origin = handlerFactory.getHandler().origin;
         }
 
         @Override
         public void mouseMoved(MouseEvent e) {
-            getHandler().mouseMoved(e);
+            handlerFactory.getHandler().mouseMoved(e);
         }
     }
 
