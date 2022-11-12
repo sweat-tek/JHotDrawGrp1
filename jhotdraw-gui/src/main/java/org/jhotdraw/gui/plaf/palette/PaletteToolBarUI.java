@@ -7,7 +7,7 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+//import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -214,20 +214,20 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
     }
 
     protected void installListeners() {
-        dockingListener = getDockingListener();
+        dockingListener = handlerFactory.getDockingListener();
         if (dockingListener != null) {
             toolBar.addMouseMotionListener(dockingListener);
             toolBar.addMouseListener(dockingListener);
         }
-        propertyListener = getPropertyListener();  // added in setFloating
+        propertyListener = handlerFactory.getPropertyListener();
         if (propertyListener != null) {
             toolBar.addPropertyChangeListener(propertyListener);
         }
-        toolBarContListener = getContainerListener();
+        toolBarContListener = handlerFactory.getContainerListener();
         if (toolBarContListener != null) {
             toolBar.addContainerListener(toolBarContListener);
         }
-        toolBarFocusListener = getFocusListener();
+        toolBarFocusListener = handlerFactory.getFocusListener();
         if (toolBarFocusListener != null) {
             // Put focus listener on all components in toolbar
             Component[] components = toolBar.getComponents();
@@ -259,7 +259,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             }
             toolBarFocusListener = null;
         }
-        handler = null;
+        handlerFactory = null;
     }
 
     protected void installKeyboardActions() {
@@ -945,7 +945,6 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         }
     
         public MouseInputListener getDockingListener() {
-            handler.tb = toolBar;
             return handler;
         }
     }
@@ -1015,6 +1014,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         }
     }
 
+    //Extract into public class and mock class variables
     private class Handler implements ContainerListener,
             FocusListener, MouseInputListener, PropertyChangeListener {
 
@@ -1058,7 +1058,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         private Point origin = null;
         private boolean isArmed = false;
 
-        @FeatureEntryPoint(value = "drag-and-drop-pressed")
+        //@FeatureEntryPoint(value = "drag-and-drop-pressed")
         @Override
         public void mousePressed(MouseEvent evt) {
             if (!tb.isEnabled()) {
@@ -1083,7 +1083,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             return xOutsideBounds || yOutsideBounds;
         }
 
-        @FeatureEntryPoint(value = "drag-and-drop-released")
+        //@FeatureEntryPoint(value = "drag-and-drop-released")
         @Override
         public void mouseReleased(MouseEvent evt) {
             if (!tb.isEnabled()) {
@@ -1100,7 +1100,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             isDragging = false;
         }
 
-        @FeatureEntryPoint(value = "drag-and-drop-dragged")
+        //@FeatureEntryPoint(value = "drag-and-drop-dragged")
         @Override
         public void mouseDragged(MouseEvent evt) {
             if (!tb.isEnabled()) {
@@ -1276,6 +1276,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            handlerFactory.getHandler().tb = toolBar;
             handlerFactory.getDockingListener().mouseClicked(e);
         }
 

@@ -64,6 +64,7 @@ public class JDisclosureToolBar extends JToolBar {
         setDisclosureState(newState);
     }
 
+    //Test
     private int calculateNewState(int currentState, int stateCount){
         return (currentState + 1) % stateCount;
     }
