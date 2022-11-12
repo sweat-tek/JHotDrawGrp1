@@ -40,11 +40,11 @@
 	  <artifactId>jhotdraw-actions</artifactId>
 	  <version>${project.version}</version>
 	 </dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>dk.sdu.mmmi</groupId>
 			<artifactId>featuretracer</artifactId>
 			<version>1.0</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>

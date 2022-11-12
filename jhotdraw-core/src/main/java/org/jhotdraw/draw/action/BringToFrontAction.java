@@ -7,7 +7,7 @@
  */
 package org.jhotdraw.draw.action;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+//import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.figure.Figure;
 import java.util.*;
 import javax.swing.undo.*;
@@ -36,7 +36,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
         updateEnabledState();
     }
 
-    @FeatureEntryPoint(value = "BringToFront")
+    //@FeatureEntryPoint(value = "BringToFront")
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
         final DrawingView view = getView();
