@@ -12,7 +12,7 @@ public class PaletteToolbarHandler implements ContainerListener,
     JToolBar toolBar;
     PaletteToolbarHandlerCallback callBack;
 
-    PaletteToolbarHandler(JToolBar toolBar, PaletteToolbarHandlerCallback callBack) {
+    public PaletteToolbarHandler(JToolBar toolBar, PaletteToolbarHandlerCallback callBack) {
         this.toolBar = toolBar;
         this.callBack = callBack;
     }
@@ -42,35 +42,38 @@ public class PaletteToolbarHandler implements ContainerListener,
     }
 
     // MouseInputListener (DockingListener)
-    private JToolBar tb;
     private boolean isDragging = false;
     private Point origin = null;
     private boolean isArmed = false;
 
     void setToolbar(JToolBar toolBar) {
-        tb = toolBar;
+        this.toolBar = toolBar;
     }
 
-    void setIsDragging(boolean isDragging) {
+    public void setIsDragging(boolean isDragging) {
         this.isDragging = isDragging;
     }
 
-    void setOrigin(Point origin) {
+    public void setOrigin(Point origin) {
         this.origin = origin;
     }
 
-    Point getOrigin() {
+    public Point getOrigin() {
         return origin;
     }
 
-    boolean getIsDragging() {
+    public boolean isDragging() {
         return isDragging;
+    }
+
+    public boolean isArmed(){
+        return isArmed;
     }
 
     // @FeatureEntryPoint(value = "drag-and-drop-pressed")
     @Override
     public void mousePressed(MouseEvent evt) {
-        if (!tb.isEnabled()) {
+        if (!toolBar.isEnabled()) {
             return;
         }
         isDragging = false;
@@ -87,15 +90,15 @@ public class PaletteToolbarHandler implements ContainerListener,
     }
 
     private boolean calculateEventOutsideBounds(Insets insets, int evtX, int evtY, int cWidth, int cHeight) {
-        boolean xOutsideBounds = evtX < insets.left || evtX > cWidth - insets.right;
-        boolean yOutsideBounds = evtY < insets.top || evtY > cHeight - insets.bottom;
+        boolean xOutsideBounds = evtX <= insets.left || evtX >= cWidth - insets.right;
+        boolean yOutsideBounds = evtY <= insets.top || evtY >= cHeight - insets.bottom;
         return xOutsideBounds || yOutsideBounds;
     }
 
     // @FeatureEntryPoint(value = "drag-and-drop-released")
     @Override
     public void mouseReleased(MouseEvent evt) {
-        if (!tb.isEnabled()) {
+        if (!toolBar.isEnabled()) {
             return;
         }
         if (isDragging == true) {
@@ -112,7 +115,7 @@ public class PaletteToolbarHandler implements ContainerListener,
     // @FeatureEntryPoint(value = "drag-and-drop-dragged")
     @Override
     public void mouseDragged(MouseEvent evt) {
-        if (!tb.isEnabled()) {
+        if (!toolBar.isEnabled()) {
             return;
         }
         if (!isArmed) {
@@ -157,8 +160,9 @@ public class PaletteToolbarHandler implements ContainerListener,
         Component[] components = toolBar.getComponents();
         JToolBar.Separator separator;
         for (int i = 0; i < components.length; ++i) {
-            if (!(components[i] instanceof JToolBar.Separator))
+            if (!(components[i] instanceof JToolBar.Separator)) {
                 continue;
+            }
             separator = (JToolBar.Separator) components[i];
             setSeparatorOrientation(separator, orientation);
         }
@@ -180,9 +184,11 @@ public class PaletteToolbarHandler implements ContainerListener,
         separator.setOrientation(newOrientation);
     }
 
-    interface PaletteToolbarHandlerCallback {
+    public interface PaletteToolbarHandlerCallback {
         void floatAt(Point position, Point origin);
+
         void dragTo(Point position, Point origin);
+
         void focusGained(int index);
     }
 }

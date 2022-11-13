@@ -971,7 +971,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         public void mousePressed(MouseEvent e) {
             handlerFactory.getHandler().setToolbar(toolBar);
             handlerFactory.getDockingListener().mousePressed(e);
-            isDragging = handlerFactory.getHandler().getIsDragging();
+            isDragging = handlerFactory.getHandler().isDragging();
         }
 
         @Override
@@ -980,7 +980,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             handlerFactory.getHandler().setIsDragging(isDragging);
             handlerFactory.getHandler().setOrigin(origin);
             handlerFactory.getHandler().mouseReleased(e);
-            isDragging = handlerFactory.getHandler().getIsDragging();
+            isDragging = handlerFactory.getHandler().isDragging();
             origin = handlerFactory.getHandler().getOrigin();
         }
 
@@ -999,7 +999,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             handlerFactory.getHandler().setToolbar(toolBar);
             handlerFactory.getHandler().setOrigin(origin);
             handlerFactory.getHandler().mouseDragged(e);
-            isDragging = handlerFactory.getHandler().getIsDragging();
+            isDragging = handlerFactory.getHandler().isDragging();
             origin = handlerFactory.getHandler().getOrigin();
         }
 
