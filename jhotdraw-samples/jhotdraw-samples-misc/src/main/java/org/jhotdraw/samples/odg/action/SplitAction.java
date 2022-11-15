@@ -45,7 +45,7 @@ public class SplitAction extends UngroupAction {
     }
 
     @SuppressWarnings("unchecked")
-    @Override
+
     public Collection<Figure> ungroupFigures(CompositeFigure group) {
         LinkedList<Figure> figures = new LinkedList<Figure>(group.getChildren());
         view.clearSelection();

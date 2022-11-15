@@ -46,7 +46,7 @@ public class GroupActionTest {
         addBehaviourToMocks(figures);
 
         assertEquals(0, groupFigure.getChildCount());
-        groupAction.groupFigures(groupFigure, figures);
+        groupAction.groupFigures(groupFigure, figures, drawingView);
         assertEquals("CompositeFigure not having two children", 2, groupFigure.getChildCount());
         verify(drawingView, times(1)).addToSelection((CompositeFigure) anyObject());
     }

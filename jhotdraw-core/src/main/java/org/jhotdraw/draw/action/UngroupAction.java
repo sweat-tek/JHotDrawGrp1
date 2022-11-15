@@ -25,7 +25,7 @@ public class UngroupAction extends AbstractGroupingAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.ungroupSelection";
-    private GroupAction groupAction;
+    //private GroupAction groupAction;
 
     public UngroupAction(DrawingEditor editor) {
         this(editor, new GroupFigure());
@@ -36,7 +36,7 @@ public class UngroupAction extends AbstractGroupingAction {
         this.compositeFigure = compositeFigure;
         labels.configureAction(this, ID);
         updateEnabledState();
-        groupAction = new GroupAction(editor, compositeFigure);
+
     }
 
     @Override
@@ -64,22 +64,22 @@ public class UngroupAction extends AbstractGroupingAction {
         if (canUngroup()) {
             CompositeFigure group = (CompositeFigure) view.getSelectedFigures().iterator().next();
             LinkedList<Figure> ungroupedFigures = new LinkedList<>();
-            ungroupedFigures.addAll(ungroupFigures(group));
+            ungroupedFigures.addAll(ungroupFigures(group, view));
             generateUndo(group, ungroupedFigures);
         }
     }
 
     @Override
     void undoAction(Collection<Figure> figures, CompositeFigure group) {
-        groupAction.groupFigures(group, figures);
+        GroupAction.groupFigures(group, figures, view);
     }
 
     @Override
     void redoAction(Collection<Figure> figures, CompositeFigure group) {
-        ungroupFigures(group);
+        ungroupFigures(group, view);
     }
 
-    public Collection<Figure> ungroupFigures(CompositeFigure group) {
+    public static Collection<Figure> ungroupFigures(CompositeFigure group, DrawingView view) {
         LinkedList<Figure> figures = new LinkedList<>(group.getChildren());
         view.clearSelection();
         group.basicRemoveAllChildren();
