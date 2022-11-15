@@ -7,8 +7,9 @@
  */
 package org.jhotdraw.draw.action;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+// import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.CompositeFigure;
 import org.jhotdraw.draw.figure.GroupFigure;
@@ -26,7 +27,7 @@ public class GroupAction extends AbstractGroupingAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.groupSelection";
-    private final UngroupAction ungroupAction;
+    private UngroupAction ungroupAction;
 
     public GroupAction(DrawingEditor editor) {
         this(editor, new GroupFigure());
@@ -53,19 +54,19 @@ public class GroupAction extends AbstractGroupingAction {
         }
     }
 
-    @FeatureEntryPoint(value = "GroupAction")
+    // @FeatureEntryPoint(value = "GroupAction")
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
         assert view != null;
         if (canGroup()) {
             LinkedList<Figure> ungroupedFigures = new LinkedList<>(view.getSelectedFigures());
             CompositeFigure group = (CompositeFigure) compositeFigure.clone();
-            groupFigures(group, ungroupedFigures);
+            groupFigures(group, ungroupedFigures, view);
             generateUndo(group, ungroupedFigures);
         }
     }
 
-    public void groupFigures(CompositeFigure group, Collection<Figure> figures) {
+    public static void groupFigures(CompositeFigure group, Collection<Figure> figures, DrawingView view) {
 
         // assertions
         assert group != null;
@@ -92,11 +93,11 @@ public class GroupAction extends AbstractGroupingAction {
 
     @Override
     void undoAction(Collection<Figure> figures, CompositeFigure group) {
-        ungroupAction.ungroupFigures(group);
+        UngroupAction.ungroupFigures(group, view);
     }
 
     @Override
     void redoAction(Collection<Figure> figures, CompositeFigure group) {
-        groupFigures(group, figures);
+        groupFigures(group, figures, view);
     }
 }

@@ -26,11 +26,7 @@ public abstract class AbstractGroupingAction extends AbstractSelectedAction {
         view = getView();
     }
 
-
-
     protected int selectionCount() {
-        assert view !=null;
-
         if (view != null) {
             return view.getSelectionCount();
         }

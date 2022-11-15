@@ -72,7 +72,7 @@ public class CombineAction extends GroupAction {
         return figures;
     }
 
-    @Override
+
     @SuppressWarnings("unchecked")
     public void groupFigures(CompositeFigure group, Collection<Figure> figures) {
         Collection<Figure> sorted = view.getDrawing().sort(figures);
