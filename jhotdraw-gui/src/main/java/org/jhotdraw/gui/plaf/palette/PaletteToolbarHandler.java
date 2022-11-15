@@ -95,23 +95,7 @@ public class PaletteToolbarHandler implements ContainerListener,
         return xOutsideBounds || yOutsideBounds;
     }
 
-    // @FeatureEntryPoint(value = "drag-and-drop-released")
-    @Override
-    public void mouseReleased(MouseEvent evt) {
-        if (!toolBar.isEnabled()) {
-            return;
-        }
-        if (isDragging == true) {
-            Point position = evt.getPoint();
-            if (origin == null) {
-                origin = evt.getComponent().getLocationOnScreen();
-            }
-            callBack.floatAt(position, position);
-        }
-        origin = null;
-        isDragging = false;
-    }
-
+    
     // @FeatureEntryPoint(value = "drag-and-drop-dragged")
     @Override
     public void mouseDragged(MouseEvent evt) {
@@ -126,7 +110,24 @@ public class PaletteToolbarHandler implements ContainerListener,
         if (origin == null) {
             origin = evt.getComponent().getLocationOnScreen();
         }
-        callBack.dragTo(position, position);
+        callBack.dragTo(position, origin);
+    }
+
+    // @FeatureEntryPoint(value = "drag-and-drop-released")
+    @Override
+    public void mouseReleased(MouseEvent evt) {
+        if (!toolBar.isEnabled()) {
+            return;
+        }
+        if (isDragging == true) {
+            Point position = evt.getPoint();
+            if (origin == null) {
+                origin = evt.getComponent().getLocationOnScreen();
+            }
+            callBack.floatAt(position, origin);
+        }
+        origin = null;
+        isDragging = false;
     }
 
     @Override
