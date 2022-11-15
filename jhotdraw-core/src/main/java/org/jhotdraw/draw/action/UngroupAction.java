@@ -11,7 +11,6 @@ import org.jhotdraw.draw.figure.CompositeFigure;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.figure.GroupFigure;
 import org.jhotdraw.draw.*;
-import org.jhotdraw.util.ResourceBundleUtil;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -26,6 +25,7 @@ public class UngroupAction extends AbstractGroupingAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.ungroupSelection";
+    private GroupAction groupAction;
 
     public UngroupAction(DrawingEditor editor) {
         this(editor, new GroupFigure());
@@ -34,9 +34,9 @@ public class UngroupAction extends AbstractGroupingAction {
     public UngroupAction(DrawingEditor editor, CompositeFigure compositeFigure) {
         super(editor);
         this.compositeFigure = compositeFigure;
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
         labels.configureAction(this, ID);
         updateEnabledState();
+        groupAction = new GroupAction(editor, compositeFigure);
     }
 
     @Override
@@ -71,11 +71,21 @@ public class UngroupAction extends AbstractGroupingAction {
 
     @Override
     void undoAction(Collection<Figure> figures, CompositeFigure group) {
-        groupFigures(group, figures);
+        groupAction.groupFigures(group, figures);
     }
 
     @Override
     void redoAction(Collection<Figure> figures, CompositeFigure group) {
         ungroupFigures(group);
+    }
+
+    public Collection<Figure> ungroupFigures(CompositeFigure group) {
+        LinkedList<Figure> figures = new LinkedList<>(group.getChildren());
+        view.clearSelection();
+        group.basicRemoveAllChildren();
+        view.getDrawing().basicAddAll(view.getDrawing().indexOf(group), figures);
+        view.getDrawing().remove(group);
+        view.addToSelection(figures);
+        return figures;
     }
 }
