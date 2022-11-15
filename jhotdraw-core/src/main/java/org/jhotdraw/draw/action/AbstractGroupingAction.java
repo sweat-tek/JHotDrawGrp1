@@ -14,50 +14,23 @@ import javax.swing.undo.UndoableEdit;
 public abstract class AbstractGroupingAction extends AbstractSelectedAction {
 
     protected CompositeFigure compositeFigure;
-    protected DrawingView view = getView();
+    protected DrawingView view;
+    ResourceBundleUtil labels;
 
     /**
      * This Abstract class can be extended into a Group og Ungroup action
      */
     public AbstractGroupingAction(DrawingEditor editor) {
         super(editor);
+        labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+        view = getView();
     }
 
-    public Collection<Figure> ungroupFigures(CompositeFigure group) {
-        LinkedList<Figure> figures = new LinkedList<>(group.getChildren());
-        view.clearSelection();
-        group.basicRemoveAllChildren();
-        view.getDrawing().basicAddAll(view.getDrawing().indexOf(group), figures);
-        view.getDrawing().remove(group);
-        view.addToSelection(figures);
-        return figures;
-    }
 
-    public void groupFigures(CompositeFigure group, Collection<Figure> figures) {
-
-        assert group != null;
-        assert figures.size() > 1;
-
-        // returns a copy of the figures sorted from back to front
-        Collection<Figure> sorted = view.getDrawing().sort(figures);
-        int index = view.getDrawing().indexOf(sorted.iterator().next());
-        view.getDrawing().basicRemoveAll(figures);
-        view.clearSelection();
-
-        // adding the composite figure to the drawing
-        view.getDrawing().add(index, group);
-        group.willChange();
-
-        // Adding figures to group
-        for (Figure f : sorted) {
-            f.willChange();
-            group.basicAdd(f);
-        }
-        group.changed();
-        view.addToSelection(group);
-    }
 
     protected int selectionCount() {
+        assert view !=null;
+
         if (view != null) {
             return view.getSelectionCount();
         }
@@ -68,12 +41,12 @@ public abstract class AbstractGroupingAction extends AbstractSelectedAction {
         this.view = view;
     }
 
-    abstract void undoAction(Collection<Figure> figures, CompositeFigure group);
-    abstract void redoAction(Collection<Figure> figures, CompositeFigure group);
-
     public void generateUndo(CompositeFigure group, LinkedList<Figure> figures) {
         fireUndoableEditHappened(new groupingUndoableEdit(figures, group));
     }
+
+    abstract void undoAction(Collection<Figure> figures, CompositeFigure group);
+    abstract void redoAction(Collection<Figure> figures, CompositeFigure group);
 
     private class groupingUndoableEdit extends AbstractUndoableEdit {
 
