@@ -52,7 +52,7 @@ public class PaletteToolbarHandlerPropertyChangeTest {
         when(event.getPropertyName()).thenReturn("orientation");
         when(event.getNewValue()).thenReturn(JToolBar.VERTICAL);
         when(toolbar.getComponents()).thenReturn(components);
-        when(separator.getSeparatorSize()).thenReturn(new Dimension(0,1));
+        when(separator.getSeparatorSize()).thenReturn(new Dimension(0, 1));
         handler = new PaletteToolbarHandler(toolbar, callback); 
         handler.propertyChange(event);
         verify(separator).setOrientation(JToolBar.VERTICAL);
@@ -65,7 +65,7 @@ public class PaletteToolbarHandlerPropertyChangeTest {
         when(event.getPropertyName()).thenReturn("orientation");
         when(event.getNewValue()).thenReturn(JToolBar.VERTICAL);
         when(toolbar.getComponents()).thenReturn(components);
-        when(separator.getSeparatorSize()).thenReturn(new Dimension(0,0));
+        when(separator.getSeparatorSize()).thenReturn(new Dimension(0, 0));
         handler = new PaletteToolbarHandler(toolbar, callback); 
         handler.propertyChange(event);
         verify(separator).setOrientation(JToolBar.HORIZONTAL);
@@ -77,7 +77,7 @@ public class PaletteToolbarHandlerPropertyChangeTest {
         when(event.getPropertyName()).thenReturn("orientation");
         when(event.getNewValue()).thenReturn(JToolBar.HORIZONTAL);
         when(toolbar.getComponents()).thenReturn(components);
-        when(separator.getSeparatorSize()).thenReturn(new Dimension(0,0));
+        when(separator.getSeparatorSize()).thenReturn(new Dimension(0, 0));
         handler = new PaletteToolbarHandler(toolbar, callback); 
         handler.propertyChange(event);
         verify(separator).setOrientation(JToolBar.VERTICAL);
