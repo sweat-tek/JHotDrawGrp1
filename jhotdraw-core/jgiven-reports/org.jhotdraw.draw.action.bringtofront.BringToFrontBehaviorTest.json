@@ -1,0 +1,76 @@
+{
+  "className": "org.jhotdraw.draw.action.bringtofront.BringToFrontBehaviorTest",
+  "name": "Bring To Front Behavior",
+  "scenarios": [
+    {
+      "className": "org.jhotdraw.draw.action.bringtofront.BringToFrontBehaviorTest",
+      "testMethodName": "figureIsBringToFront",
+      "description": "Figure is bring to front",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "a figure is selected and some are unselected",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "a figure is selected and some are unselected"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 49210583,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "figure is brought to front",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "figure is brought to front"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1512000,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "figure is in front",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "figure is in front"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 82017875,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 1104846917
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 1104846917
+    }
+  ],
+  "tagMap": {}
+}
