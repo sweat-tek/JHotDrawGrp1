@@ -9,7 +9,7 @@ import org.jhotdraw.draw.figure.Figure;
 
 public class GivenFigureSelected extends Stage<GivenFigureSelected> {
     @ProvidedScenarioState
-    DrawingEditor drawingEditor;
+    DrawingEditor drawingEditor; //Passed to when
 
     @BeforeStage
     private void before() {
