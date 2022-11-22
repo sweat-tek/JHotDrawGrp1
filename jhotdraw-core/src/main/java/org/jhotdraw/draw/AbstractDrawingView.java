@@ -303,7 +303,7 @@ public abstract class AbstractDrawingView implements DrawingView, EditableCompon
     private final EventHandler eventHandler = new EventHandler();
     /*
     public AbstractDrawingView() {
-        addFocusListener(eventHandler);
+        //addFocusListener(eventHandler);
     }
 
      */
