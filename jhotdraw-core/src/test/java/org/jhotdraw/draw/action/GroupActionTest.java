@@ -48,7 +48,7 @@ public class GroupActionTest {
         assertEquals(0, groupFigure.getChildCount());
         groupAction.groupFigures(groupFigure, figures, drawingView);
         assertEquals("CompositeFigure not having two children", 2, groupFigure.getChildCount());
-        verify(drawingView, times(1)).addToSelection((CompositeFigure) anyObject());
+        verify(drawingView, times(1)).addToSelection((CompositeFigure) any());
     }
 
     private void addBehaviourToMocks(List<Figure> figures) {
@@ -61,7 +61,7 @@ public class GroupActionTest {
         when(drawing.sort(anyCollection())).thenReturn(figures);
         when(drawing.indexOf(figures.iterator().next())).thenReturn(0);
         doNothing().when(drawing).basicRemoveAll(anyCollection());
-        doNothing().when(drawing).add(anyInt(), anyObject());
+        doNothing().when(drawing).add(anyInt(), any());
     }
 
     private List<Figure> getTwoMockedFigures() {
