@@ -30,7 +30,6 @@ public class GivenPaletteToolbarHandlerSet extends Stage<GivenPaletteToolbarHand
                 callbackReturn.floatAtCall++;
                 callbackReturn.FloatAtOrigin = origin;
                 callbackReturn.FloatAtPosition = position;
-                
             }
 
             @Override
@@ -38,14 +37,10 @@ public class GivenPaletteToolbarHandlerSet extends Stage<GivenPaletteToolbarHand
                 callbackReturn.dragToCall++;
                 callbackReturn.DragToOrigin = origin;
                 callbackReturn.DragToPosition = position;
-                
             }
 
             @Override
-            public void focusGained(int index) {
-                // TODO Auto-generated method stub
-                
-            }});
+            public void focusGained(int index) {}});
 
         return self();
     }

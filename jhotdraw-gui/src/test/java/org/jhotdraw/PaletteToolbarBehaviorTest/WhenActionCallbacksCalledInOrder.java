@@ -20,7 +20,7 @@ import com.tngtech.jgiven.annotation.ExpectedScenarioState;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 
 @RunWith(MockitoJUnitRunner.class)
-public class WhenActionCallbacksCalledInOrder extends Stage<WhenActionCallbacksCalledInOrder>{
+public class WhenActionCallbacksCalledInOrder extends Stage<WhenActionCallbacksCalledInOrder> {
 
     @ExpectedScenarioState
     PaletteToolbarHandler handler;
@@ -44,35 +44,39 @@ public class WhenActionCallbacksCalledInOrder extends Stage<WhenActionCallbacksC
     @BeforeScenario
     public void init() {
         MockitoAnnotations.initMocks(this);
-        // after initMocks() you can use the standard mockito functionality to mock methods and instances.
     }
 
-    public WhenActionCallbacksCalledInOrder actionCallbacksCalledInOrder(){
+    public WhenActionCallbacksCalledInOrder actionCallbacksCalledInOrder() {
 
         Insets insets = new InsetsUIResource(1, 1, 1, 1);
 
-        org.mockito.Mockito.when(toolbar.isEnabled()).thenReturn(true);
-        org.mockito.Mockito.when(toolbar.getWidth()).thenReturn(3);
-        org.mockito.Mockito.when(toolbar.getHeight()).thenReturn(3);
-        org.mockito.Mockito.when(toolbar.getBorder()).thenReturn(null);
-        org.mockito.Mockito.when(toolbar.getInsets()).thenReturn(insets);
-        org.mockito.Mockito.when(mousePressedEvent.getSource()).thenReturn(toolbar);
-        org.mockito.Mockito.when(mousePressedEvent.getX()).thenReturn(1);
-        org.mockito.Mockito.when(mousePressedEvent.getY()).thenReturn(1);
+        {
+            org.mockito.Mockito.when(toolbar.isEnabled()).thenReturn(true);
+            org.mockito.Mockito.when(toolbar.getWidth()).thenReturn(3);
+            org.mockito.Mockito.when(toolbar.getHeight()).thenReturn(3);
+            org.mockito.Mockito.when(toolbar.getBorder()).thenReturn(null);
+            org.mockito.Mockito.when(toolbar.getInsets()).thenReturn(insets);
+            org.mockito.Mockito.when(mousePressedEvent.getSource()).thenReturn(toolbar);
+            org.mockito.Mockito.when(mousePressedEvent.getX()).thenReturn(1);
+            org.mockito.Mockito.when(mousePressedEvent.getY()).thenReturn(1);
+        }
 
         handler.mousePressed(mousePressedEvent);
 
-        
+        {
+            org.mockito.Mockito.when(mouseDraggedEvent.getComponent()).thenReturn(component);
+            org.mockito.Mockito.when(component.getLocationOnScreen()).thenReturn(new Point(0, 0));
+            org.mockito.Mockito.when(mouseDraggedEvent.getPoint()).thenReturn(new Point(1, 1));
 
-        org.mockito.Mockito.when(mouseDraggedEvent.getComponent()).thenReturn(component);
-        org.mockito.Mockito.when(component.getLocationOnScreen()).thenReturn(new Point(0,0));
-        org.mockito.Mockito.when(mouseDraggedEvent.getPoint()).thenReturn(new Point(1,1));
+        }
 
         handler.mouseDragged(mouseDraggedEvent);
+        {
+            org.mockito.Mockito.when(mouseDraggedEvent.getComponent()).thenReturn(component);
+            org.mockito.Mockito.when(component.getLocationOnScreen()).thenReturn(new Point(0, 0));
+            org.mockito.Mockito.when(mousePressedEvent.getPoint()).thenReturn(new Point(2, 2));
 
-        org.mockito.Mockito.when(mouseDraggedEvent.getComponent()).thenReturn(component);
-        org.mockito.Mockito.when(component.getLocationOnScreen()).thenReturn(new Point(0,0));
-        org.mockito.Mockito.when(mousePressedEvent.getPoint()).thenReturn(new Point(2,2));
+        }
 
         handler.mouseReleased(mousePressedEvent);
 

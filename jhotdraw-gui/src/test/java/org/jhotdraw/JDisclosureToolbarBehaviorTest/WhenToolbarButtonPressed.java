@@ -24,11 +24,11 @@ public class WhenToolbarButtonPressed extends Stage<WhenToolbarButtonPressed>{
     @ProvidedScenarioState
     JButton button;
 
-    public WhenToolbarButtonPressed toolbarButtonPressed(){
+public WhenToolbarButtonPressed toolbarButtonPressed(){
 
-        button.getActionListeners()[0].actionPerformed(new ActionEvent(button, 0, null));
+    button.getActionListeners()[0].actionPerformed(new ActionEvent(button, 0, null));
 
-        return self();
-    }
+    return self();
+}
     
 }
