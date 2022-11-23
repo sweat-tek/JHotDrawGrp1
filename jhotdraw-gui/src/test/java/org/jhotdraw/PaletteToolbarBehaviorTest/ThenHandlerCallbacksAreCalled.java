@@ -13,18 +13,18 @@ public class ThenHandlerCallbacksAreCalled extends Stage<ThenHandlerCallbacksAre
 
     public ThenHandlerCallbacksAreCalled handlerCallbacksAreCalled(){
 
-        assertEquals(callbackReturn.dragToCall,  1);
+        assertEquals(callbackReturn.dragToCall, 1);
 
-        assertEquals(callbackReturn.DragToOrigin,   new Point(0,0));
+        assertEquals(callbackReturn.DragToOrigin, new Point(0, 0));
 
-        assertEquals(callbackReturn.DragToPosition,   new Point(1,1));
+        assertEquals(callbackReturn.DragToPosition, new Point(1, 1));
 
 
-        assertEquals(callbackReturn.floatAtCall,  1);
+        assertEquals(callbackReturn.floatAtCall, 1);
 
-        assertEquals(callbackReturn.FloatAtOrigin, new Point(0,0));
+        assertEquals(callbackReturn.FloatAtOrigin, new Point(0, 0));
 
-        assertEquals(callbackReturn.FloatAtPosition,   new Point(2,2));
+        assertEquals(callbackReturn.FloatAtPosition, new Point(2, 2));
 
         return self();
     }

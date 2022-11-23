@@ -2,7 +2,6 @@ package org.jhotdraw.JDisclosureToolbarBehaviorTest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.awt.Component;
 
@@ -34,8 +33,8 @@ public class GivenToolbarShown extends Stage<GivenToolbarShown>{
         
         Component[] components = toolbar.getComponents();
 
-        for(int x = 0 ; x < components.length ; x++){
-            if(components[x] instanceof JButton){
+        for (int x = 0 ; x < components.length ; x++){
+            if (components[x] instanceof JButton){
                 button = (JButton) components[x];
             }
         }

@@ -1,8 +1,5 @@
 package org.jhotdraw.JDisclosureToolbarBehaviorTest;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
