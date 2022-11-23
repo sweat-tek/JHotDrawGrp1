@@ -1,5 +1,7 @@
 package org.jhotdraw.gui.plaf.palette;
 
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
@@ -70,7 +72,7 @@ public class PaletteToolbarHandler implements ContainerListener,
         return isArmed;
     }
 
-    // @FeatureEntryPoint(value = "drag-and-drop-pressed")
+    @FeatureEntryPoint(value = "drag-and-drop-pressed")
     @Override
     public void mousePressed(MouseEvent evt) {
         if (!toolBar.isEnabled()) {
@@ -96,7 +98,7 @@ public class PaletteToolbarHandler implements ContainerListener,
     }
 
     
-    // @FeatureEntryPoint(value = "drag-and-drop-dragged")
+    @FeatureEntryPoint(value = "drag-and-drop-dragged")
     @Override
     public void mouseDragged(MouseEvent evt) {
         if (!toolBar.isEnabled()) {
@@ -113,7 +115,7 @@ public class PaletteToolbarHandler implements ContainerListener,
         callBack.dragTo(position, origin);
     }
 
-    // @FeatureEntryPoint(value = "drag-and-drop-released")
+    @FeatureEntryPoint(value = "drag-and-drop-released")
     @Override
     public void mouseReleased(MouseEvent evt) {
         if (!toolBar.isEnabled()) {

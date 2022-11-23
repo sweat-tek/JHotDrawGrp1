@@ -7,7 +7,7 @@
  */
 package org.jhotdraw.draw.tool;
 
-//import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.figure.Figure;
 import java.awt.*;
 import java.awt.event.*;
@@ -223,7 +223,7 @@ public class SelectionTool extends AbstractTool {
         tracker.draw(g);
     }
 
-    //@FeatureEntryPoint(value = "Select")
+    @FeatureEntryPoint(value = "Select")
     @Override
     public void mousePressed(MouseEvent evt) {
         if (getView() != null && getView().isEnabled()) {

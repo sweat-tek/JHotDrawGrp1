@@ -44,7 +44,7 @@ public class SendToBackAction extends AbstractArrangeAction{
         this.bringToFrontAction = bringToFrontAction;
     }
 
-    //@FeatureEntryPoint(value = "SendToBack")
+    @FeatureEntryPoint(value = "SendToBack")
     @Override
     public void action(DrawingView view, Collection<Figure> figures) {
         assert view != null;
