@@ -41,7 +41,7 @@ public class WhenFigureIsBroughtToFront extends Stage<WhenFigureIsBroughtToFront
         nonselectedFigures.removeAll(selectedFigures);
     }
 
-    public WhenFigureIsBroughtToFront figureIsBroughtToFront(){
+    public WhenFigureIsBroughtToFront bringingFiguresToTheFront(){
         bringToFrontAction.action(editor.getActiveView(), selectedFigures);
 
         return self();

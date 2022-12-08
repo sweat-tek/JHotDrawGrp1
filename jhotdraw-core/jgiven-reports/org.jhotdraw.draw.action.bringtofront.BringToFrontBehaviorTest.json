@@ -4,8 +4,8 @@
   "scenarios": [
     {
       "className": "org.jhotdraw.draw.action.bringtofront.BringToFrontBehaviorTest",
-      "testMethodName": "figureIsBringToFront",
-      "description": "Figure is bring to front",
+      "testMethodName": "bringingASelectedFigureToTheFrontResultsInJustThatFigureBeingBroughtToTheFront",
+      "description": "Bringing a selected figure to the front results in just that figure being brought to the front",
       "tagIds": [],
       "explicitParameters": [],
       "derivedParameters": [],
@@ -14,50 +14,66 @@
           "caseNr": 1,
           "steps": [
             {
-              "name": "a figure is selected and some are unselected",
+              "name": "a figure is selected",
               "words": [
                 {
                   "value": "Given",
                   "isIntroWord": true
                 },
                 {
-                  "value": "a figure is selected and some are unselected"
+                  "value": "a figure is selected"
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 49210583,
+              "durationInNanos": 21325542,
               "depth": 0,
               "parentFailed": false
             },
             {
-              "name": "figure is brought to front",
+              "name": "some unselected figures",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "some unselected figures"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 807875,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "bringing figures to the front",
               "words": [
                 {
                   "value": "When",
                   "isIntroWord": true
                 },
                 {
-                  "value": "figure is brought to front"
+                  "value": "bringing figures to the front"
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 1512000,
+              "durationInNanos": 1183875,
               "depth": 0,
               "parentFailed": false
             },
             {
-              "name": "figure is in front",
+              "name": "only selected figure is in front",
               "words": [
                 {
                   "value": "Then",
                   "isIntroWord": true
                 },
                 {
-                  "value": "figure is in front"
+                  "value": "only selected figure is in front"
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 82017875,
+              "durationInNanos": 73685375,
               "depth": 0,
               "parentFailed": false
             }
@@ -65,11 +81,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 1104846917
+          "durationInNanos": 828602209
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 1104846917
+      "durationInNanos": 828602209
     }
   ],
   "tagMap": {}

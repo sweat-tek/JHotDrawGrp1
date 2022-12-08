@@ -19,7 +19,7 @@ public class ThenFigureIsInBack extends Stage<ThenFigureIsInBack> {
     @ExpectedScenarioState
     private Set<Figure> selectedFigures;
 
-    public ThenFigureIsInBack figureIsInBack() {
+    public ThenFigureIsInBack onlySelectedFigureIsInBack() {
         //Only one figure is selected
         assertThat(editor.getActiveView().getSelectionCount()).isEqualTo(1);
 

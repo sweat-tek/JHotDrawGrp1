@@ -22,7 +22,7 @@ public class ThenFigureIsInFront extends Stage<ThenFigureIsInFront> {
     @ExpectedScenarioState
     private Set<Figure> nonselectedFigures;
 
-    public ThenFigureIsInFront figureIsInFront() {
+    public ThenFigureIsInFront onlySelectedFigureIsInFront() {
         //Only one figure is selected
         assertThat(editor.getActiveView().getSelectionCount()).isEqualTo(1);
 

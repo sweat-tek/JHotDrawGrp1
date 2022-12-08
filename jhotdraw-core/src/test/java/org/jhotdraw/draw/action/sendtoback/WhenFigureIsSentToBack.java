@@ -38,7 +38,7 @@ public class WhenFigureIsSentToBack extends Stage<WhenFigureIsSentToBack> {
         nonselectedFigures.removeAll(selectedFigures);
     }
 
-    public WhenFigureIsSentToBack figureIsSentToBack(){
+    public WhenFigureIsSentToBack sendingFiguresToTheBack(){
         sendToBackAction.action(editor.getActiveView(), selectedFigures);
 
         return self();
