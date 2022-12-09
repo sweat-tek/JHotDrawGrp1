@@ -36,7 +36,7 @@ public class JDisclosureToolBar extends JToolBar {
     private void initComponents() {
         setLayout(new GridBagLayout());
 
-        disclosureButton = disclosureButton != null ? disclosureButton : createPaletteButton();
+        disclosureButton = disclosureButton != null ? disclosureButton : (JButton) createPaletteButton();
 
         add(disclosureButton, createDisclosureButtonGridConstraints());
 
@@ -45,8 +45,8 @@ public class JDisclosureToolBar extends JToolBar {
         putClientProperty(PaletteToolBarUI.TOOLBAR_ICON_PROPERTY, new EmptyIcon(10, 8));
     }
 
-    private JButton createPaletteButton() {
-        JButton btn = new JButton();
+    private AbstractButton createPaletteButton() {
+        AbstractButton btn = new JButton();
         btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
         btn.setBorderPainted(false);
         btn.setIcon(new DisclosureIcon());
@@ -90,15 +90,14 @@ public class JDisclosureToolBar extends JToolBar {
     }
 
     public void setDisclosureState(int newValue) {
-        setDisclosureStateCount(newValue);
+        int oldValue = getDisclosureState();
+
+        disclosureButton.putClientProperty(DisclosureIcon.CURRENT_STATE_PROPERTY, newValue);
 
         reorganizeDisclosureButton(newValue);
 
-        validateParent();
+        firePropertyChange(DISCLOSURE_STATE_PROPERTY, oldValue, newValue);
 
-        repaint();
-
-        setDisclosureStateProperty(newValue, DisclosureIcon.CURRENT_STATE_PROPERTY, DISCLOSURE_STATE_PROPERTY);
     }
 
     private void reorganizeDisclosureButton(int newValue) {
@@ -114,6 +113,8 @@ public class JDisclosureToolBar extends JToolBar {
             gbc.gridx = 1;
         }
         add(disclosureButton, gbc);
+
+        validateParent();
     }
 
     private void validateParent() {
@@ -126,6 +127,8 @@ public class JDisclosureToolBar extends JToolBar {
         }
 
         parent.validate();
+
+        repaint();
     }
 
     private GridBagConstraints createDisclosedComponentGridConstraints() {
