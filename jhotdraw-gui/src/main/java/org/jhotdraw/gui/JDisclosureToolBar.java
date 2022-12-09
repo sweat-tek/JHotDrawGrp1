@@ -96,8 +96,6 @@ public class JDisclosureToolBar extends JToolBar {
 
         validateParent();
 
-        repaint();
-
         setDisclosureStateProperty(newValue, DisclosureIcon.CURRENT_STATE_PROPERTY, DISCLOSURE_STATE_PROPERTY);
     }
 
@@ -114,6 +112,8 @@ public class JDisclosureToolBar extends JToolBar {
             gbc.gridx = 1;
         }
         add(disclosureButton, gbc);
+
+        validateParent();
     }
 
     private void validateParent() {
@@ -126,6 +126,8 @@ public class JDisclosureToolBar extends JToolBar {
         }
 
         parent.validate();
+
+        repaint();
     }
 
     private GridBagConstraints createDisclosedComponentGridConstraints() {
