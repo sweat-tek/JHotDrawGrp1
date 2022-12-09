@@ -23,8 +23,8 @@ public class ThenFigureIsInBack extends Stage<ThenFigureIsInBack> {
         //Only one figure is selected
         assertThat(editor.getActiveView().getSelectionCount()).isEqualTo(1);
 
-        Figure selected = editor.getActiveView().getSelectedFigures().iterator().next();
-        assertThat(selected).is(selected());
+        Figure selectedFigure = editor.getActiveView().getSelectedFigures().iterator().next();
+        assertThat(selectedFigure).is(selected()); //Assert that it is selected
 
         List<Figure> figures = editor.getActiveView().getDrawing().getChildren();
 
@@ -36,6 +36,10 @@ public class ThenFigureIsInBack extends Stage<ThenFigureIsInBack> {
         return self();
     }
 
+    /**
+     * Condition to check if a figure is selected
+     * @return Condition<Figure>
+     */
     private Condition<Figure> selected(){
         return new Condition<Figure>(){
             @Override
