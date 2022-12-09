@@ -36,7 +36,7 @@ public class JDisclosureToolBar extends JToolBar {
     private void initComponents() {
         setLayout(new GridBagLayout());
 
-        disclosureButton = disclosureButton != null ? disclosureButton : createPaletteButton();
+        disclosureButton = disclosureButton != null ? disclosureButton : (JButton) createPaletteButton();
 
         add(disclosureButton, createDisclosureButtonGridConstraints());
 
@@ -45,8 +45,8 @@ public class JDisclosureToolBar extends JToolBar {
         putClientProperty(PaletteToolBarUI.TOOLBAR_ICON_PROPERTY, new EmptyIcon(10, 8));
     }
 
-    private JButton createPaletteButton() {
-        JButton btn = new JButton();
+    private AbstractButton createPaletteButton() {
+        AbstractButton btn = new JButton();
         btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
         btn.setBorderPainted(false);
         btn.setIcon(new DisclosureIcon());
@@ -80,23 +80,20 @@ public class JDisclosureToolBar extends JToolBar {
     }
 
     public void setDisclosureStateCount(int newValue) {
-        setDisclosureStateProperty(newValue, DisclosureIcon.STATE_COUNT_PROPERTY, DISCLOSURE_STATE_COUNT_PROPERTY);
-    }
-
-    private void setDisclosureStateProperty(int newValue, String icon, String property) {
         int oldValue = getDisclosureStateCount();
-        disclosureButton.putClientProperty(icon, newValue);
-        firePropertyChange(property, oldValue, newValue);
+        disclosureButton.putClientProperty(DisclosureIcon.STATE_COUNT_PROPERTY, newValue);
+        firePropertyChange(DISCLOSURE_STATE_COUNT_PROPERTY, oldValue, newValue);
     }
 
     public void setDisclosureState(int newValue) {
-        setDisclosureStateCount(newValue);
+        int oldValue = getDisclosureState();
+
+        disclosureButton.putClientProperty(DisclosureIcon.CURRENT_STATE_PROPERTY, newValue);
 
         reorganizeDisclosureButton(newValue);
 
-        validateParent();
+        firePropertyChange(DISCLOSURE_STATE_PROPERTY, oldValue, newValue);
 
-        setDisclosureStateProperty(newValue, DisclosureIcon.CURRENT_STATE_PROPERTY, DISCLOSURE_STATE_PROPERTY);
     }
 
     private void reorganizeDisclosureButton(int newValue) {
