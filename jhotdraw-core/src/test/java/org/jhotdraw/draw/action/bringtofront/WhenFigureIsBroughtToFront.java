@@ -24,24 +24,14 @@ public class WhenFigureIsBroughtToFront extends Stage<WhenFigureIsBroughtToFront
     @ProvidedScenarioState
     private Set<Figure> selectedFigures;
 
-    @ProvidedScenarioState
-    private Set<Figure> nonselectedFigures;
-
-    @ProvidedScenarioState
-    private Set<Figure> childrenFigures;
-
-
     @BeforeStage
     public void before() {
         bringToFrontAction = new BringToFrontAction(editor);
 
         selectedFigures = new HashSet<>(editor.getActiveView().getSelectedFigures());
-
-        nonselectedFigures = new HashSet<>(editor.getActiveView().getDrawing().getChildren());
-        nonselectedFigures.removeAll(selectedFigures);
     }
 
-    public WhenFigureIsBroughtToFront figureIsBroughtToFront(){
+    public WhenFigureIsBroughtToFront bringingFiguresToTheFront(){
         bringToFrontAction.action(editor.getActiveView(), selectedFigures);
 
         return self();

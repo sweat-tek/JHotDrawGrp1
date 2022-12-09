@@ -24,21 +24,15 @@ public class WhenFigureIsSentToBack extends Stage<WhenFigureIsSentToBack> {
     @ProvidedScenarioState
     private Set<Figure> selectedFigures;
 
-    @ProvidedScenarioState
-    private Set<Figure> nonselectedFigures;
-
 
     @BeforeStage
     public void before() {
         sendToBackAction = new SendToBackAction(editor);
 
         selectedFigures = new HashSet<>(editor.getActiveView().getSelectedFigures());
-
-        nonselectedFigures = new HashSet<>(editor.getActiveView().getDrawing().getChildren());
-        nonselectedFigures.removeAll(selectedFigures);
     }
 
-    public WhenFigureIsSentToBack figureIsSentToBack(){
+    public WhenFigureIsSentToBack sendingFiguresToTheBack(){
         sendToBackAction.action(editor.getActiveView(), selectedFigures);
 
         return self();

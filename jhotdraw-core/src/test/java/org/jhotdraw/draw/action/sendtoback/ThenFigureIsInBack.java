@@ -19,23 +19,27 @@ public class ThenFigureIsInBack extends Stage<ThenFigureIsInBack> {
     @ExpectedScenarioState
     private Set<Figure> selectedFigures;
 
-    public ThenFigureIsInBack figureIsInBack() {
+    public ThenFigureIsInBack onlySelectedFigureIsInBack() {
         //Only one figure is selected
         assertThat(editor.getActiveView().getSelectionCount()).isEqualTo(1);
 
-        Figure selected = editor.getActiveView().getSelectedFigures().iterator().next();
-        assertThat(selected).is(selected());
+        Figure selectedFigure = editor.getActiveView().getSelectedFigures().iterator().next();
+        assertThat(selectedFigure).is(selected()); //Assert that it is selected
 
         List<Figure> figures = editor.getActiveView().getDrawing().getChildren();
 
         //Figure should be in the front of the list as it will be drawn first, thereby in back
         Figure figure = figures.get(0);
 
-        assertThat(figure).isSameAs(selected); //It should be the same object
+        assertThat(figure).isSameAs(selectedFigure); //It should be the same object
 
         return self();
     }
 
+    /**
+     * Condition to check if a figure is selected
+     * @return Condition<Figure>
+     */
     private Condition<Figure> selected(){
         return new Condition<Figure>(){
             @Override
