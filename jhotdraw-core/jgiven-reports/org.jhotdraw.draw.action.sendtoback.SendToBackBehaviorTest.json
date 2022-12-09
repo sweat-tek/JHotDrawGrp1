@@ -14,18 +14,18 @@
           "caseNr": 1,
           "steps": [
             {
-              "name": "a figure is selected",
+              "name": "a selected figure",
               "words": [
                 {
                   "value": "Given",
                   "isIntroWord": true
                 },
                 {
-                  "value": "a figure is selected"
+                  "value": "a selected figure"
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 19777042,
+              "durationInNanos": 23241792,
               "depth": 0,
               "parentFailed": false
             },
@@ -41,7 +41,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 786291,
+              "durationInNanos": 664958,
               "depth": 0,
               "parentFailed": false
             },
@@ -57,7 +57,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 583667,
+              "durationInNanos": 646084,
               "depth": 0,
               "parentFailed": false
             },
@@ -73,7 +73,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 64433583,
+              "durationInNanos": 75165709,
               "depth": 0,
               "parentFailed": false
             }
@@ -81,11 +81,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 837142291
+          "durationInNanos": 1300630792
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 837142291
+      "durationInNanos": 1300630792
     }
   ],
   "tagMap": {}

@@ -20,7 +20,7 @@ public class GivenFiguresToArrange extends Stage<GivenFiguresToArrange> {
     }
 
 
-    public GivenFiguresToArrange aFigureIsSelected(){
+    public GivenFiguresToArrange aSelectedFigure(){
         Figure figure1 = new DiamondFigure();
         Figure figure2 = new DiamondFigure();
         Figure figure3 = new DiamondFigure();

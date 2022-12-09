@@ -8,7 +8,7 @@ public class BringToFrontBehaviorTest extends ScenarioTest<GivenFiguresToArrange
 
     @Test
     public void bringingASelectedFigureToTheFrontResultsInJustThatFigureBeingBroughtToTheFront(){
-        given().aFigureIsSelected()
+        given().aSelectedFigure()
                 .and().someUnselectedFigures();
 
         when().bringingFiguresToTheFront();
