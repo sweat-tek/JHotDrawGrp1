@@ -7,8 +7,7 @@
  */
 package org.jhotdraw.draw.action;
 
-
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+// import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.figure.Figure;
@@ -55,7 +54,7 @@ public class GroupAction extends AbstractGroupingAction {
         }
     }
 
-    @FeatureEntryPoint(value = "GroupAction")
+    // @FeatureEntryPoint(value = "GroupAction")
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
         assert view != null;

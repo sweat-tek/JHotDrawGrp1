@@ -4,8 +4,8 @@
   "scenarios": [
     {
       "className": "org.jhotdraw.draw.action.sendtoback.SendToBackBehaviorTest",
-      "testMethodName": "figureIsSentToBack",
-      "description": "Figure is sent to back",
+      "testMethodName": "sendingASelectedFigureToTheBackResultsInJustThatFigureBeingSentToTheBack",
+      "description": "Sending a selected figure to the back results in just that figure being sent to the back",
       "tagIds": [],
       "explicitParameters": [],
       "derivedParameters": [],
@@ -14,50 +14,66 @@
           "caseNr": 1,
           "steps": [
             {
-              "name": "a figure is selected and some are unselected",
+              "name": "a selected figure",
               "words": [
                 {
                   "value": "Given",
                   "isIntroWord": true
                 },
                 {
-                  "value": "a figure is selected and some are unselected"
+                  "value": "a selected figure"
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 1072125,
+              "durationInNanos": 29649375,
               "depth": 0,
               "parentFailed": false
             },
             {
-              "name": "figure is sent to back",
+              "name": "some unselected figures",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "some unselected figures"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 974542,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "sending figures to the back",
               "words": [
                 {
                   "value": "When",
                   "isIntroWord": true
                 },
                 {
-                  "value": "figure is sent to back"
+                  "value": "sending figures to the back"
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 448959,
+              "durationInNanos": 788292,
               "depth": 0,
               "parentFailed": false
             },
             {
-              "name": "figure is in back",
+              "name": "only selected figure is in back",
               "words": [
                 {
                   "value": "Then",
                   "isIntroWord": true
                 },
                 {
-                  "value": "figure is in back"
+                  "value": "only selected figure is in back"
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 1230083,
+              "durationInNanos": 87270792,
               "depth": 0,
               "parentFailed": false
             }
@@ -65,11 +81,11 @@
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
-          "durationInNanos": 21826375
+          "durationInNanos": 960640667
         }
       ],
       "casesAsTable": false,
-      "durationInNanos": 21826375
+      "durationInNanos": 960640667
     }
   ],
   "tagMap": {}

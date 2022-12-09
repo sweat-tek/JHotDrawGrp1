@@ -22,19 +22,19 @@ public class ThenFigureIsInFront extends Stage<ThenFigureIsInFront> {
     @ExpectedScenarioState
     private Set<Figure> nonselectedFigures;
 
-    public ThenFigureIsInFront figureIsInFront() {
+    public ThenFigureIsInFront onlySelectedFigureIsInFront() {
         //Only one figure is selected
         assertThat(editor.getActiveView().getSelectionCount()).isEqualTo(1);
 
-        Figure selected = editor.getActiveView().getSelectedFigures().iterator().next();
-        assertThat(selected).is(selected());
+        Figure selectedFigure = editor.getActiveView().getSelectedFigures().iterator().next();
+        assertThat(selectedFigure).is(selected()); //Assert that it is selected
 
         List<Figure> figures = editor.getActiveView().getDrawing().getChildren();
 
         //Figure should be the last in the list as it will be drawn last, thereby in the front
         Figure figure = figures.get(figures.size()-1);
 
-        assertThat(figure).isSameAs(selected); //It should be the same object
+        assertThat(figure).isSameAs(selectedFigure); //It should be the same object
 
         return self();
     }
