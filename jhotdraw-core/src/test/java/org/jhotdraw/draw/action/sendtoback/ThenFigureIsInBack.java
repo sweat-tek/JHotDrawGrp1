@@ -31,7 +31,7 @@ public class ThenFigureIsInBack extends Stage<ThenFigureIsInBack> {
         //Figure should be in the front of the list as it will be drawn first, thereby in back
         Figure figure = figures.get(0);
 
-        assertThat(figure).isSameAs(selected); //It should be the same object
+        assertThat(figure).isSameAs(selectedFigure); //It should be the same object
 
         return self();
     }
