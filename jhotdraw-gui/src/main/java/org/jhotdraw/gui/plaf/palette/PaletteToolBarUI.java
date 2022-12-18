@@ -7,21 +7,21 @@
  */
 package org.jhotdraw.gui.plaf.palette;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
-import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.plaf.*;
 
+import org.jhotdraw.gui.plaf.palette.PaletteToolbarHandler.PaletteToolbarHandlerCallback;
+
 /**
  * ToolBarUI for palette components.
  * <p>
- * This UI differs from BasicToolBarUI, in that the component holding the toolbar
+ * This UI differs from BasicToolBarUI, in that the component holding the
+ * toolbar
  * is supposed to use BoxLayout instead of BorderLayout. This allows to have
  * multiple toolbars in the same component. The toolbars can be reorderd in the
  * component, but they are not allowed to float in their own floating window.
@@ -39,11 +39,9 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
     private boolean floating;
     private int floatingX;
     private int floatingY;
-    private JFrame floatingFrame;
     private RootPaneContainer floatingToolBar;
     protected DragWindow dragWindow;
     private Container dockingSource;
-    private int dockingSensitivity = 0;
     protected int focusedCompIndex = -1;
     protected Color dockingColor = null;
     protected Color floatingColor = null;
@@ -53,24 +51,28 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
     protected PropertyChangeListener propertyListener;
     protected ContainerListener toolBarContListener;
     protected FocusListener toolBarFocusListener;
-    private Handler handler;
+    private HandlerFactory handlerFactory;
     protected Integer constraintBeforeFloating = 0;
     // Rollover button implementation.
     private static String IS_ROLLOVER = "JToolBar.isRollover";
-    /*private*/ static String IS_DIVIDER_DRAWN = "Palette.ToolBar.isDividerDrawn";
+    /* private */ static String IS_DIVIDER_DRAWN = "Palette.ToolBar.isDividerDrawn";
     // client properties
     /* The value of this client property must be an Icon or null. */
     public static final String TOOLBAR_ICON_PROPERTY = "Palette.ToolBar.icon";
-    /* The value of this client property must be an Integer or null, if it is null, the value 2 is used. */
+    /*
+     * The value of this client property must be an Integer or null, if it is null,
+     * the value 2 is used.
+     */
     public static final String TOOLBAR_TEXT_ICON_GAP_PROPERTY = "Palette.ToolBar.textIconGap";
-    /* The value of this client property must be an Insets object or null, if it is null, the insets of the toolbar border are used */
+    /*
+     * The value of this client property must be an Insets object or null, if it is
+     * null, the insets of the toolbar border are used
+     */
     public static final String TOOLBAR_INSETS_OVERRIDE_PROPERTY = "Palette.ToolBar.insetsOverride";
     private static Border rolloverBorder;
     private static Border nonRolloverBorder;
     private static Border nonRolloverToggleBorder;
     private boolean rolloverBorders = false;
-    private HashMap<AbstractButton, Border> borderTable = new HashMap<>();
-    private HashMap<AbstractButton, Boolean> rolloverTable = new HashMap<>();
     /**
      * As of Java 2 platform v1.3 this previously undocumented field is no
      * longer used.
@@ -125,8 +127,6 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         installComponents();
         installListeners();
         installKeyboardActions();
-        // Initialize instance vars
-        dockingSensitivity = 0;
         floating = false;
         floatingX = floatingY = 0;
         floatingToolBar = null;
@@ -192,7 +192,6 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         if (nonRolloverToggleBorder == null) {
             nonRolloverToggleBorder = createNonRolloverToggleBorder();
         }
-        setRolloverBorders(isRolloverBorders());
     }
 
     protected void uninstallDefaults() {
@@ -201,7 +200,6 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         floatingColor = null;
         dockingBorderColor = null;
         floatingBorderColor = null;
-        installNormalBorders(toolBar);
         rolloverBorder = null;
         nonRolloverBorder = null;
         nonRolloverToggleBorder = null;
@@ -214,20 +212,21 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
     }
 
     protected void installListeners() {
-        dockingListener = createDockingListener();
+        handlerFactory = new HandlerFactory();
+        dockingListener = handlerFactory.getDockingListener();
         if (dockingListener != null) {
             toolBar.addMouseMotionListener(dockingListener);
             toolBar.addMouseListener(dockingListener);
         }
-        propertyListener = createPropertyListener();  // added in setFloating
+        propertyListener = handlerFactory.getPropertyListener();
         if (propertyListener != null) {
             toolBar.addPropertyChangeListener(propertyListener);
         }
-        toolBarContListener = createToolBarContListener();
+        toolBarContListener = handlerFactory.getContainerListener();
         if (toolBarContListener != null) {
             toolBar.addContainerListener(toolBarContListener);
         }
-        toolBarFocusListener = createToolBarFocusListener();
+        toolBarFocusListener = handlerFactory.getFocusListener();
         if (toolBarFocusListener != null) {
             // Put focus listener on all components in toolbar
             Component[] components = toolBar.getComponents();
@@ -245,7 +244,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         }
         if (propertyListener != null) {
             toolBar.removePropertyChangeListener(propertyListener);
-            propertyListener = null;  // removed in setFloating
+            propertyListener = null; // removed in setFloating
         }
         if (toolBarContListener != null) {
             toolBar.removeContainerListener(toolBarContListener);
@@ -259,7 +258,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
             }
             toolBarFocusListener = null;
         }
-        handler = null;
+        handlerFactory = null;
     }
 
     protected void installKeyboardActions() {
@@ -505,179 +504,6 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         return rolloverBorders;
     }
 
-    /**
-     * Sets the flag for enabling rollover borders on the toolbar and it will
-     * also install the apropriate border depending on the state of the flag.
-     *
-     * @param rollover if true, rollover borders are installed.
-     * Otherwise non-rollover borders are installed
-     * @see #isRolloverBorders
-     * @since 1.4
-     */
-    public void setRolloverBorders(boolean rollover) {
-        rolloverBorders = rollover;
-        if (rolloverBorders) {
-            installRolloverBorders(toolBar);
-        } else {
-            installNonRolloverBorders(toolBar);
-        }
-    }
-
-    /**
-     * Installs rollover borders on all the child components of the JComponent.
-     * <p>
-     * This is a convenience method to call <code>setBorderToRollover</code>
-     * for each child component.
-     *
-     * @param c container which holds the child components (usally a JToolBar)
-     * @see #setBorderToRollover
-     * @since 1.4
-     */
-    protected void installRolloverBorders(JComponent c) {
-        // Put rollover borders on buttons
-        Component[] components = c.getComponents();
-        for (int i = 0; i < components.length; ++i) {
-            if (components[i] instanceof JComponent) {
-                ((JComponent) components[i]).updateUI();
-                setBorderToRollover(components[i]);
-            }
-        }
-    }
-
-    /**
-     * Installs non-rollover borders on all the child components of the JComponent.
-     * A non-rollover border is the border that is installed on the child component
-     * while it is in the toolbar.
-     * <p>
-     * This is a convenience method to call <code>setBorderToNonRollover</code>
-     * for each child component.
-     *
-     * @param c container which holds the child components (usally a JToolBar)
-     * @see #setBorderToNonRollover
-     * @since 1.4
-     */
-    protected void installNonRolloverBorders(JComponent c) {
-        // Put non-rollover borders on buttons. These borders reduce the margin.
-        Component[] components = c.getComponents();
-        for (int i = 0; i < components.length; ++i) {
-            if (components[i] instanceof JComponent) {
-                ((JComponent) components[i]).updateUI();
-                setBorderToNonRollover(components[i]);
-            }
-        }
-    }
-
-    /**
-     * Installs normal borders on all the child components of the JComponent.
-     * A normal border is the original border that was installed on the child
-     * component before it was added to the toolbar.
-     * <p>
-     * This is a convenience method to call <code>setBorderNormal</code>
-     * for each child component.
-     *
-     * @param c container which holds the child components (usally a JToolBar)
-     * @see #setBorderToNonRollover
-     * @since 1.4
-     */
-    protected void installNormalBorders(JComponent c) {
-        // Put back the normal borders on buttons
-        Component[] components = c.getComponents();
-        for (int i = 0; i < components.length; ++i) {
-            setBorderToNormal(components[i]);
-        }
-    }
-
-    /**
-     * Sets the border of the component to have a rollover border which
-     * was created by <code>createRolloverBorder</code>.
-     *
-     * @param c component which will have a rollover border installed
-     * @see #createRolloverBorder
-     * @since 1.4
-     */
-    protected void setBorderToRollover(Component c) {
-        if (true) {
-            return;
-        }
-        if (c instanceof AbstractButton) {
-            AbstractButton b = (AbstractButton) c;
-            Border border = borderTable.get(b);
-            if (border == null || border instanceof UIResource) {
-                borderTable.put(b, b.getBorder());
-            }
-            // Only set the border if its the default border
-            if (b.getBorder() instanceof UIResource) {
-                b.setBorder(getRolloverBorder(b));
-            }
-            rolloverTable.put(b, b.isRolloverEnabled());
-            b.setRolloverEnabled(true);
-        }
-    }
-
-    private Border getRolloverBorder(AbstractButton b) {
-        Object borderProvider = UIManager.get("ToolBar.rolloverBorderProvider");
-        if (borderProvider == null) {
-            return rolloverBorder;
-        }
-        //return ((BorderProvider) borderProvider).getRolloverBorder(b);
-        return null;
-    }
-
-    /**
-     * Sets the border of the component to have a non-rollover border which
-     * was created by <code>createNonRolloverBorder</code>.
-     *
-     * @param c component which will have a non-rollover border installed
-     * @see #createNonRolloverBorder
-     * @since 1.4
-     */
-    protected void setBorderToNonRollover(Component c) {
-        if (true) {
-            return;
-        }
-        if (c instanceof AbstractButton) {
-            AbstractButton b = (AbstractButton) c;
-            Border border = borderTable.get(b);
-            if (border == null || border instanceof UIResource) {
-                borderTable.put(b, b.getBorder());
-            }
-            // Only set the border if its the default border
-            if (b.getBorder() instanceof UIResource) {
-                if (b instanceof JToggleButton) {
-                    ((JToggleButton) b).setBorder(nonRolloverToggleBorder);
-                } else {
-                    b.setBorder(nonRolloverBorder);
-                }
-            }
-            rolloverTable.put(b, b.isRolloverEnabled() ? Boolean.TRUE : Boolean.FALSE);
-            b.setRolloverEnabled(false);
-        }
-    }
-
-    /**
-     * Sets the border of the component to have a normal border.
-     * A normal border is the original border that was installed on the child
-     * component before it was added to the toolbar.
-     *
-     * @param c component which will have a normal border re-installed
-     * @see #createNonRolloverBorder
-     * @since 1.4
-     */
-    protected void setBorderToNormal(Component c) {
-        if (true) {
-            return;
-        }
-        if (c instanceof AbstractButton) {
-            AbstractButton b = (AbstractButton) c;
-            Border border = borderTable.remove(b);
-            b.setBorder(border);
-            Boolean value = rolloverTable.remove(b);
-            if (value != null) {
-                b.setRolloverEnabled(value);
-            }
-        }
-    }
-
     public void setFloatingLocation(int x, int y) {
         floatingX = x;
         floatingY = y;
@@ -723,8 +549,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
                     ((Window) floatingToolBar).setVisible(false);
                 }
                 floatingToolBar.getContentPane().remove(toolBar);
-                Integer constraint = getDockingConstraint(dockingSource,
-                        p);
+                Integer constraint = getDockingConstraint(dockingSource, p);
                 if (constraint == null) {
                     constraint = 0;
                 }
@@ -794,19 +619,6 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         this.floatingColor = c;
     }
 
-    private boolean isBlocked(Component comp, Object constraint) {
-        if (comp instanceof Container) {
-            Container cont = (Container) comp;
-            LayoutManager lm = cont.getLayout();
-            if (lm instanceof BorderLayout) {
-                BorderLayout blm = (BorderLayout) lm;
-                Component c = blm.getLayoutComponent(cont, constraint);
-                return (c != null && c != toolBar);
-            }
-        }
-        return false;
-    }
-
     public boolean canDock(Component c, Point p) {
         return (p != null && getDockingConstraint(c, p) != null);
     }
@@ -854,7 +666,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
                 }
                 Point offset = dragWindow.getOffset();
                 if (offset == null) {
-                    //Dimension size = toolBar.getPreferredSize();
+                    // Dimension size = toolBar.getPreferredSize();
                     Dimension size = toolBar.getSize();
                     offset = new Point(size.width / 2, size.height / 2);
                     dragWindow.setOffset(offset);
@@ -883,7 +695,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
                 }
                 dragWindow.setLocation(dragPoint.x, dragPoint.y);
                 if (dragWindow.isVisible() == false) {
-                    //Dimension size = toolBar.getPreferredSize();
+                    // Dimension size = toolBar.getPreferredSize();
                     Dimension size = toolBar.getSize();
                     dragWindow.setSize(size.width, size.height);
                     dragWindow.setVisible(true);
@@ -925,28 +737,47 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         }
     }
 
-    private Handler getHandler() {
-        if (handler == null) {
-            handler = new Handler();
+    private class HandlerFactory {
+        PaletteToolbarHandler handler = new PaletteToolbarHandler(toolBar, new PaletteToolbarHandlerCallback() {
+
+            @Override
+            public void floatAt(Point position, Point origin) {
+                floatAt(position, origin);
+
+            }
+
+            @Override
+            public void dragTo(Point position, Point origin) {
+                dragTo(position, origin);
+
+            }
+
+            @Override
+            public void focusGained(int index) {
+                focusedCompIndex = index;
+            }
+
+        });
+
+        public PaletteToolbarHandler getHandler() {
+            return handler;
         }
-        return handler;
-    }
 
-    protected ContainerListener createToolBarContListener() {
-        return getHandler();
-    }
+        public ContainerListener getContainerListener() {
+            return handler;
+        }
 
-    protected FocusListener createToolBarFocusListener() {
-        return getHandler();
-    }
+        public FocusListener getFocusListener() {
+            return handler;
+        }
 
-    protected PropertyChangeListener createPropertyListener() {
-        return getHandler();
-    }
+        public PropertyChangeListener getPropertyListener() {
+            return handler;
+        }
 
-    protected MouseInputListener createDockingListener() {
-        getHandler().tb = toolBar;
-        return getHandler();
+        public MouseInputListener getDockingListener() {
+            return handler;
+        }
     }
 
     protected WindowListener createFrameListener() {
@@ -980,7 +811,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         }
     }
 
-    private static class Actions extends /*UI*/ AbstractAction {
+    private static class Actions extends /* UI */ AbstractAction {
 
         private static final long serialVersionUID = 1L;
         private static final String NAVIGATE_RIGHT = "navigateRight";
@@ -1010,155 +841,6 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
                 ui.navigateFocusedComp(NORTH);
             } else if ((NAVIGATE_DOWN == null && key == null) || (NAVIGATE_DOWN != null && NAVIGATE_DOWN.equals(key))) {
                 ui.navigateFocusedComp(SOUTH);
-            }
-        }
-    }
-
-    private class Handler implements ContainerListener,
-            FocusListener, MouseInputListener, PropertyChangeListener {
-
-        // ContainerListener
-        @Override
-        public void componentAdded(ContainerEvent evt) {
-            Component c = evt.getChild();
-            if (toolBarFocusListener != null) {
-                c.addFocusListener(toolBarFocusListener);
-            }
-            if (isRolloverBorders()) {
-                setBorderToRollover(c);
-            } else {
-                setBorderToNonRollover(c);
-            }
-        }
-
-        @Override
-        public void componentRemoved(ContainerEvent evt) {
-            Component c = evt.getChild();
-            if (toolBarFocusListener != null) {
-                c.removeFocusListener(toolBarFocusListener);
-            }
-            // Revert the button border
-            setBorderToNormal(c);
-        }
-
-        // FocusListener
-        @Override
-        public void focusGained(FocusEvent evt) {
-            Component c = evt.getComponent();
-            focusedCompIndex = toolBar.getComponentIndex(c);
-        }
-
-        @Override
-        public void focusLost(FocusEvent evt) {
-        }
-        // MouseInputListener (DockingListener)
-        JToolBar tb;
-        boolean isDragging = false;
-        Point origin = null;
-        boolean isArmed = false;
-
-        @FeatureEntryPoint(value = "drag-and-drop-pressed")
-        @Override
-        public void mousePressed(MouseEvent evt) {
-            if (!tb.isEnabled()) {
-                return;
-            }
-            isDragging = false;
-            if (evt.getSource() instanceof JToolBar) {
-                JComponent c = (JComponent) evt.getSource();
-                Insets insets;
-                if (c.getBorder() instanceof PaletteToolBarBorder) {
-                    insets = ((PaletteToolBarBorder) c.getBorder()).getDragInsets(c);
-                } else {
-                    insets = c.getInsets();
-                }
-                isArmed = !(evt.getX() > insets.left && evt.getX() < c.getWidth() - insets.right
-                        && evt.getY() > insets.top && evt.getY() < c.getHeight() - insets.bottom);
-            }
-        }
-
-        @FeatureEntryPoint(value = "drag-and-drop-released")
-        @Override
-        public void mouseReleased(MouseEvent evt) {
-            if (!tb.isEnabled()) {
-                return;
-            }
-            if (isDragging == true) {
-                Point position = evt.getPoint();
-                if (origin == null) {
-                    origin = evt.getComponent().getLocationOnScreen();
-                }
-                floatAt(position, origin);
-            }
-            origin = null;
-            isDragging = false;
-        }
-
-        @FeatureEntryPoint(value = "drag-and-drop-dragged")
-        @Override
-        public void mouseDragged(MouseEvent evt) {
-            if (!tb.isEnabled()) {
-                return;
-            }
-            if (!isArmed) {
-                return;
-            }
-            isDragging = true;
-            Point position = evt.getPoint();
-            if (origin == null) {
-                origin = evt.getComponent().getLocationOnScreen();
-            }
-            dragTo(position, origin);
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent evt) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent evt) {
-        }
-
-        @Override
-        public void mouseExited(MouseEvent evt) {
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent evt) {
-        }
-
-        // PropertyChangeListener
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            String propertyName = evt.getPropertyName();
-            if ("lookAndFeel".equals(propertyName)) {
-                toolBar.updateUI();
-            } else if ("orientation".equals(propertyName)) {
-                // Search for JSeparator components and change it's orientation
-                // to match the toolbar and flip it's orientation.
-                Component[] components = toolBar.getComponents();
-                int orientation = ((Integer) evt.getNewValue());
-                JToolBar.Separator separator;
-                for (int i = 0; i < components.length; ++i) {
-                    if (components[i] instanceof JToolBar.Separator) {
-                        separator = (JToolBar.Separator) components[i];
-                        if ((orientation == JToolBar.HORIZONTAL)) {
-                            separator.setOrientation(JSeparator.VERTICAL);
-                        } else {
-                            separator.setOrientation(JSeparator.HORIZONTAL);
-                        }
-                        Dimension size = separator.getSeparatorSize();
-                        if (size != null && size.width != size.height) {
-                            // Flip the orientation.
-                            Dimension newSize
-                                    = new Dimension(size.height, size.width);
-                            separator.setSeparatorSize(newSize);
-                        }
-                    }
-                }
-            } else if ((propertyName == null && IS_ROLLOVER == null) || (propertyName != null && propertyName.equals(IS_ROLLOVER))) {
-                installNormalBorders(toolBar);
-                setRolloverBorders(((Boolean) evt.getNewValue()));
             }
         }
     }
@@ -1205,12 +887,12 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         // class calls into the Handler.
         @Override
         public void componentAdded(ContainerEvent e) {
-            getHandler().componentAdded(e);
+            handlerFactory.getContainerListener().componentAdded(e);
         }
 
         @Override
         public void componentRemoved(ContainerEvent e) {
-            getHandler().componentRemoved(e);
+            handlerFactory.getContainerListener().componentRemoved(e);
         }
     }
 
@@ -1222,12 +904,12 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         // class calls into the Handler.
         @Override
         public void focusGained(FocusEvent e) {
-            getHandler().focusGained(e);
+            handlerFactory.getFocusListener().focusGained(e);
         }
 
         @Override
         public void focusLost(FocusEvent e) {
-            getHandler().focusLost(e);
+            handlerFactory.getFocusListener().focusLost(e);
         }
     }
 
@@ -1239,7 +921,7 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
         // class calls into the Handler.
         @Override
         public void propertyChange(PropertyChangeEvent e) {
-            getHandler().propertyChange(e);
+            handlerFactory.getPropertyListener().propertyChange(e);
         }
     }
 
@@ -1259,53 +941,54 @@ public class PaletteToolBarUI extends ToolBarUI implements SwingConstants {
 
         public DockingListener(JToolBar t) {
             this.toolBar = t;
-            getHandler().tb = t;
+            handlerFactory.getHandler().setToolbar(toolBar);
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            getHandler().mouseClicked(e);
+            handlerFactory.getHandler().setToolbar(toolBar);
+            handlerFactory.getDockingListener().mouseClicked(e);
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-            getHandler().tb = toolBar;
-            getHandler().mousePressed(e);
-            isDragging = getHandler().isDragging;
+            handlerFactory.getHandler().setToolbar(toolBar);
+            handlerFactory.getDockingListener().mousePressed(e);
+            isDragging = handlerFactory.getHandler().isDragging();
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            getHandler().tb = toolBar;
-            getHandler().isDragging = isDragging;
-            getHandler().origin = origin;
-            getHandler().mouseReleased(e);
-            isDragging = getHandler().isDragging;
-            origin = getHandler().origin;
+            handlerFactory.getHandler().setToolbar(toolBar);
+            handlerFactory.getHandler().setIsDragging(isDragging);
+            handlerFactory.getHandler().setOrigin(origin);
+            handlerFactory.getHandler().mouseReleased(e);
+            isDragging = handlerFactory.getHandler().isDragging();
+            origin = handlerFactory.getHandler().getOrigin();
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            getHandler().mouseEntered(e);
+            handlerFactory.getHandler().mouseEntered(e);
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            getHandler().mouseExited(e);
+            handlerFactory.getHandler().mouseExited(e);
         }
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            getHandler().tb = toolBar;
-            getHandler().origin = origin;
-            getHandler().mouseDragged(e);
-            isDragging = getHandler().isDragging;
-            origin = getHandler().origin;
+            handlerFactory.getHandler().setToolbar(toolBar);
+            handlerFactory.getHandler().setOrigin(origin);
+            handlerFactory.getHandler().mouseDragged(e);
+            isDragging = handlerFactory.getHandler().isDragging();
+            origin = handlerFactory.getHandler().getOrigin();
         }
 
         @Override
         public void mouseMoved(MouseEvent e) {
-            getHandler().mouseMoved(e);
+            handlerFactory.getHandler().mouseMoved(e);
         }
     }
 
