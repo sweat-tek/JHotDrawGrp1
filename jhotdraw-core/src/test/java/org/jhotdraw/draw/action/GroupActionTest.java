@@ -24,13 +24,13 @@ public class GroupActionTest {
     GroupAction groupAction;
     CompositeFigure groupFigure;
     DrawingEditor drawingEditorMock = mock(DrawingEditor.class);
-    Drawing drawing = mock((Drawing.class));
-    DrawingView drawingView = mock(DrawingView.class);
+    Drawing drawingMock = mock((Drawing.class));
+    DrawingView drawingViewMock = mock(DrawingView.class);
 
     @Before
     public void setUp() throws Exception {
         groupAction = new GroupAction(drawingEditorMock);
-        groupAction.setView(drawingView);
+        groupAction.setView(drawingViewMock);
     }
 
     @After
@@ -46,22 +46,22 @@ public class GroupActionTest {
         addBehaviourToMocks(figures);
 
         assertEquals(0, groupFigure.getChildCount());
-        groupAction.groupFigures(groupFigure, figures, drawingView);
+        GroupAction.groupFigures(groupFigure, figures, drawingViewMock);
         assertEquals("CompositeFigure not having two children", 2, groupFigure.getChildCount());
-        verify(drawingView, times(1)).addToSelection((CompositeFigure) anyObject());
+        verify(drawingViewMock, times(1)).addToSelection((CompositeFigure) anyObject());
     }
 
     private void addBehaviourToMocks(List<Figure> figures) {
         // drawingView Mock
-        when(drawingView.getDrawing()).thenReturn(drawing);
-        doNothing().when(drawingView).clearSelection();
-        doNothing().when(drawingView).addToSelection((Figure) any());
+        when(drawingViewMock.getDrawing()).thenReturn(drawingMock);
+        doNothing().when(drawingViewMock).clearSelection();
+        doNothing().when(drawingViewMock).addToSelection((Figure) any());
 
         // drawing Mock
-        when(drawing.sort(anyCollection())).thenReturn(figures);
-        when(drawing.indexOf(figures.iterator().next())).thenReturn(0);
-        doNothing().when(drawing).basicRemoveAll(anyCollection());
-        doNothing().when(drawing).add(anyInt(), anyObject());
+        when(drawingMock.sort(anyCollection())).thenReturn(figures);
+        when(drawingMock.indexOf(figures.iterator().next())).thenReturn(0);
+        doNothing().when(drawingMock).basicRemoveAll(anyCollection());
+        doNothing().when(drawingMock).add(anyInt(), any());
     }
 
     private List<Figure> getTwoMockedFigures() {
@@ -84,7 +84,7 @@ public class GroupActionTest {
     // boundary case
     @Test
     public void testGroupingWithSelectionOfOneFigure() {
-        when(drawingView.getSelectionCount()).thenReturn(1);
-        assertFalse("should not be able to group with only 1 figure selected", groupAction.canGroup());
+        when(drawingViewMock.getSelectionCount()).thenReturn(1);
+        assertFalse("grouping requires two figures selected", groupAction.canGroup());
     }
 }

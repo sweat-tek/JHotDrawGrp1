@@ -27,7 +27,6 @@ public class GroupAction extends AbstractGroupingAction {
 
     private static final long serialVersionUID = 1L;
     public static final String ID = "edit.groupSelection";
-    private UngroupAction ungroupAction;
 
     public GroupAction(DrawingEditor editor) {
         this(editor, new GroupFigure());
@@ -38,7 +37,6 @@ public class GroupAction extends AbstractGroupingAction {
         this.compositeFigure = compositeFigure;
         labels.configureAction(this, ID);
         updateEnabledState();
-        ungroupAction = new UngroupAction(editor, compositeFigure);
     }
 
     protected boolean canGroup() {
