@@ -102,4 +102,7 @@ public class AppletApplication extends AbstractApplication {
     public JMenu createHelpMenu(View v) {
         return null;
     }
+
+    @Override
+    protected JMenuBar createMenuBar(View v) {return null;}
 }

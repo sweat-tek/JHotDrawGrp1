@@ -40,6 +40,7 @@ import org.jhotdraw.gui.action.ButtonFactory;
 import org.jhotdraw.net.URIUtil;
 import org.jhotdraw.undo.UndoRedoManager;
 import org.jhotdraw.util.*;
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 
 /**
  * Provides a view on a drawing.
@@ -50,6 +51,7 @@ import org.jhotdraw.util.*;
  * @version $Id$
  */
 public class DrawView extends AbstractView {
+
 
     private static final long serialVersionUID = 1L;
     /**
@@ -66,6 +68,7 @@ public class DrawView extends AbstractView {
     /**
      * Creates a new view.
      */
+    @FeatureEntryPoint(value = "Main")
     public DrawView() {
         initComponents();
         scrollPane.setLayout(new PlacardScrollPaneLayout());
