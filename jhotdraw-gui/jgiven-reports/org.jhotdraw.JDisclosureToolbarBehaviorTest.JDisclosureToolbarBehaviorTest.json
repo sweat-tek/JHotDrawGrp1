@@ -1,0 +1,76 @@
+{
+  "className": "org.jhotdraw.JDisclosureToolbarBehaviorTest.JDisclosureToolbarBehaviorTest",
+  "name": "J Disclosure Toolbar Behavior",
+  "scenarios": [
+    {
+      "className": "org.jhotdraw.JDisclosureToolbarBehaviorTest.JDisclosureToolbarBehaviorTest",
+      "testMethodName": "ToolbarIsHidden",
+      "description": "Toolbar is hidden",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "toolbar shown",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "toolbar shown"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 139089600,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "toolbar button pressed",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "toolbar button pressed"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 939700,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "toolbar hidden",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "toolbar hidden"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 881700,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 164213800
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 164213800
+    }
+  ],
+  "tagMap": {}
+}

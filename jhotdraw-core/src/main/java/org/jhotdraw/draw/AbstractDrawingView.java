@@ -19,6 +19,10 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.figure.Figure;
+
+
+import static com.sun.java.accessibility.util.AWTEventMonitor.addFocusListener;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -302,10 +306,11 @@ public abstract class AbstractDrawingView implements DrawingView, EditableCompon
         }
     }
     private final EventHandler eventHandler = new EventHandler();
-
+    /*
     public AbstractDrawingView() {
-        /*addFocusListener(eventHandler)*/;
     }
+
+     */
 
     @Override
     public Drawing getDrawing() {
