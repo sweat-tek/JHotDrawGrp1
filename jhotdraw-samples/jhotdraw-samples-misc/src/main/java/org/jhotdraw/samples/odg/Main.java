@@ -9,7 +9,7 @@ package org.jhotdraw.samples.odg;
 
 import org.jhotdraw.api.app.Application;
 import org.jhotdraw.api.app.ApplicationModel;
-import org.jhotdraw.app.OSXApplication;
+import org.jhotdraw.samples.draw.app.OSXApplication;
 
 /**
  * Main entry point of the ODG sample application. Creates an {@link Application}

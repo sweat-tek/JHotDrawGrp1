@@ -8,9 +8,9 @@
 package org.jhotdraw.samples.net;
 
 import org.jhotdraw.api.app.Application;
-import org.jhotdraw.app.DefaultApplicationModel;
-import org.jhotdraw.app.OSXApplication;
-import org.jhotdraw.app.SDIApplication;
+import org.jhotdraw.samples.draw.app.DefaultApplicationModel;
+import org.jhotdraw.samples.draw.app.OSXApplication;
+import org.jhotdraw.samples.draw.app.SDIApplication;
 
 /**
  * Main entry point of the Net sample application. Creates an {@link Application}

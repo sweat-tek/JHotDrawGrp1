@@ -8,8 +8,8 @@
 package org.jhotdraw.samples.draw;
 
 import org.jhotdraw.api.app.Application;
-import org.jhotdraw.app.OSXApplication;
-import org.jhotdraw.app.SDIApplication;
+import org.jhotdraw.samples.draw.app.OSXApplication;
+import org.jhotdraw.samples.draw.app.SDIApplication;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 /**

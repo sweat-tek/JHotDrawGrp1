@@ -14,7 +14,7 @@ import org.jhotdraw.api.app.Application;
 import org.jhotdraw.api.app.ApplicationModel;
 import org.jhotdraw.api.app.View;
 import org.jhotdraw.api.gui.URIChooser;
-import org.jhotdraw.app.DefaultApplicationModel;
+import org.jhotdraw.samples.draw.app.DefaultApplicationModel;
 import org.jhotdraw.draw.figure.AbstractAttributedFigure;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.figure.BezierFigure;

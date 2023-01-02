@@ -20,7 +20,7 @@ import javax.swing.border.*;
 import org.jhotdraw.action.edit.RedoAction;
 import org.jhotdraw.action.edit.UndoAction;
 import org.jhotdraw.api.gui.URIChooser;
-import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.samples.draw.app.AbstractView;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;

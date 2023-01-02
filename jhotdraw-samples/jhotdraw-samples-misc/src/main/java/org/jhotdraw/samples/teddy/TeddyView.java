@@ -21,7 +21,7 @@ import javax.swing.undo.*;
 import org.jhotdraw.action.edit.RedoAction;
 import org.jhotdraw.action.edit.UndoAction;
 import org.jhotdraw.api.gui.URIChooser;
-import org.jhotdraw.app.AbstractView;
+import org.jhotdraw.samples.draw.app.AbstractView;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.samples.teddy.io.*;
 import org.jhotdraw.samples.teddy.regex.*;
