@@ -50,9 +50,9 @@ public class CombineAction extends GroupAction {
         return canCombine;
     }
 
-    @Override
+
     @SuppressWarnings("unchecked")
-    public Collection<Figure> ungroupFigures(DrawingView view, CompositeFigure group) {
+    public Collection<Figure> ungroupFigures(CompositeFigure group) {
         LinkedList<Figure> figures = new LinkedList<Figure>(group.getChildren());
         view.clearSelection();
         group.basicRemoveAllChildren();
@@ -72,9 +72,9 @@ public class CombineAction extends GroupAction {
         return figures;
     }
 
-    @Override
+
     @SuppressWarnings("unchecked")
-    public void groupFigures(DrawingView view, CompositeFigure group, Collection<Figure> figures) {
+    public void groupFigures(CompositeFigure group, Collection<Figure> figures) {
         Collection<Figure> sorted = view.getDrawing().sort(figures);
         view.getDrawing().basicRemoveAll(figures);
         view.clearSelection();

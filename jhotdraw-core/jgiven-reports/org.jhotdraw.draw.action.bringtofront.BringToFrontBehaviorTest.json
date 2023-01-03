@@ -1,0 +1,92 @@
+{
+  "className": "org.jhotdraw.draw.action.bringtofront.BringToFrontBehaviorTest",
+  "name": "Bring To Front Behavior",
+  "scenarios": [
+    {
+      "className": "org.jhotdraw.draw.action.bringtofront.BringToFrontBehaviorTest",
+      "testMethodName": "bringingASelectedFigureToTheFrontResultsInJustThatFigureBeingBroughtToTheFront",
+      "description": "Bringing a selected figure to the front results in just that figure being brought to the front",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "a selected figure",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "a selected figure"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 38453292,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "some unselected figures",
+              "words": [
+                {
+                  "value": "and",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "some unselected figures"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 575958,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "bringing figures to the front",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "bringing figures to the front"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1925875,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "only selected figure is in front",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "only selected figure is in front"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 105873250,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 937195875
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 937195875
+    }
+  ],
+  "tagMap": {}
+}
